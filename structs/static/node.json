@@ -1,0 +1,522 @@
+{
+    "apiVersion": "v1",
+    "kind": "Node",
+    "metadata": {
+        "annotations": {
+            "node.alpha.kubernetes.io/ttl": "0",
+            "volumes.kubernetes.io/controller-managed-attach-detach": "true"
+        },
+        "creationTimestamp": "2020-11-06T09:38:26Z",
+        "labels": {
+            "beta.kubernetes.io/arch": "amd64",
+            "beta.kubernetes.io/os": "linux",
+            "kubernetes.io/arch": "amd64",
+            "kubernetes.io/hostname": "k8s1",
+            "kubernetes.io/os": "linux"
+        },
+        "managedFields": [
+            {
+                "apiVersion": "v1",
+                "fieldsType": "FieldsV1",
+                "fieldsV1": {
+                    "f:metadata": {
+                        "f:annotations": {
+                            "f:node.alpha.kubernetes.io/ttl": {}
+                        },
+                        "f:labels": {
+                            "f:beta.kubernetes.io/arch": {},
+                            "f:beta.kubernetes.io/os": {}
+                        }
+                    },
+                    "f:spec": {
+                        "f:podCIDR": {},
+                        "f:podCIDRs": {
+                            ".": {},
+                            "v:\"10.16.0.0/16\"": {}
+                        }
+                    }
+                },
+                "manager": "kube-controller-manager",
+                "operation": "Update",
+                "time": "2020-11-06T13:51:32Z"
+            },
+            {
+                "apiVersion": "v1",
+                "fieldsType": "FieldsV1",
+                "fieldsV1": {
+                    "f:metadata": {
+                        "f:annotations": {
+                            ".": {},
+                            "f:volumes.kubernetes.io/controller-managed-attach-detach": {}
+                        },
+                        "f:labels": {
+                            ".": {},
+                            "f:kubernetes.io/arch": {},
+                            "f:kubernetes.io/hostname": {},
+                            "f:kubernetes.io/os": {}
+                        }
+                    },
+                    "f:status": {
+                        "f:addresses": {
+                            ".": {},
+                            "k:{\"type\":\"Hostname\"}": {
+                                ".": {},
+                                "f:address": {},
+                                "f:type": {}
+                            },
+                            "k:{\"type\":\"InternalIP\"}": {
+                                ".": {},
+                                "f:address": {},
+                                "f:type": {}
+                            }
+                        },
+                        "f:allocatable": {
+                            ".": {},
+                            "f:cpu": {},
+                            "f:ephemeral-storage": {},
+                            "f:hugepages-2Mi": {},
+                            "f:memory": {},
+                            "f:pods": {}
+                        },
+                        "f:capacity": {
+                            ".": {},
+                            "f:cpu": {},
+                            "f:ephemeral-storage": {},
+                            "f:hugepages-2Mi": {},
+                            "f:memory": {},
+                            "f:pods": {}
+                        },
+                        "f:conditions": {
+                            ".": {},
+                            "k:{\"type\":\"DiskPressure\"}": {
+                                ".": {},
+                                "f:lastHeartbeatTime": {},
+                                "f:lastTransitionTime": {},
+                                "f:message": {},
+                                "f:reason": {},
+                                "f:status": {},
+                                "f:type": {}
+                            },
+                            "k:{\"type\":\"MemoryPressure\"}": {
+                                ".": {},
+                                "f:lastHeartbeatTime": {},
+                                "f:lastTransitionTime": {},
+                                "f:message": {},
+                                "f:reason": {},
+                                "f:status": {},
+                                "f:type": {}
+                            },
+                            "k:{\"type\":\"PIDPressure\"}": {
+                                ".": {},
+                                "f:lastHeartbeatTime": {},
+                                "f:lastTransitionTime": {},
+                                "f:message": {},
+                                "f:reason": {},
+                                "f:status": {},
+                                "f:type": {}
+                            },
+                            "k:{\"type\":\"Ready\"}": {
+                                ".": {},
+                                "f:lastHeartbeatTime": {},
+                                "f:lastTransitionTime": {},
+                                "f:message": {},
+                                "f:reason": {},
+                                "f:status": {},
+                                "f:type": {}
+                            }
+                        },
+                        "f:daemonEndpoints": {
+                            "f:kubeletEndpoint": {
+                                "f:Port": {}
+                            }
+                        },
+                        "f:images": {},
+                        "f:nodeInfo": {
+                            "f:architecture": {},
+                            "f:bootID": {},
+                            "f:containerRuntimeVersion": {},
+                            "f:kernelVersion": {},
+                            "f:kubeProxyVersion": {},
+                            "f:kubeletVersion": {},
+                            "f:machineID": {},
+                            "f:operatingSystem": {},
+                            "f:osImage": {},
+                            "f:systemUUID": {}
+                        }
+                    }
+                },
+                "manager": "kubelet",
+                "operation": "Update",
+                "time": "2020-12-02T11:55:00Z"
+            }
+        ],
+        "name": "k8s1",
+        "resourceVersion": "431137",
+        "selfLink": "/api/v1/nodes/k8s1",
+        "uid": "01b54687-93fb-4982-ab40-94ff6e6998c8"
+    },
+    "spec": {
+        "podCIDR": "10.16.0.0/16",
+        "podCIDRs": [
+            "10.16.0.0/16"
+        ]
+    },
+    "status": {
+        "addresses": [
+            {
+                "address": "192.168.33.11",
+                "type": "InternalIP"
+            },
+            {
+                "address": "k8s1",
+                "type": "Hostname"
+            }
+        ],
+        "allocatable": {
+            "cpu": "2",
+            "ephemeral-storage": "36892307805",
+            "hugepages-2Mi": "0",
+            "memory": "3922464Ki",
+            "pods": "110"
+        },
+        "capacity": {
+            "cpu": "2",
+            "ephemeral-storage": "40030716Ki",
+            "hugepages-2Mi": "0",
+            "memory": "4024864Ki",
+            "pods": "110"
+        },
+        "conditions": [
+            {
+                "lastHeartbeatTime": "2020-12-02T10:56:10Z",
+                "lastTransitionTime": "2020-12-02T10:56:10Z",
+                "message": "Cilium is running on this node",
+                "reason": "CiliumIsUp",
+                "status": "False",
+                "type": "NetworkUnavailable"
+            },
+            {
+                "lastHeartbeatTime": "2020-12-02T11:55:00Z",
+                "lastTransitionTime": "2020-11-06T09:38:26Z",
+                "message": "kubelet has sufficient memory available",
+                "reason": "KubeletHasSufficientMemory",
+                "status": "False",
+                "type": "MemoryPressure"
+            },
+            {
+                "lastHeartbeatTime": "2020-12-02T11:55:00Z",
+                "lastTransitionTime": "2020-11-06T09:38:26Z",
+                "message": "kubelet has no disk pressure",
+                "reason": "KubeletHasNoDiskPressure",
+                "status": "False",
+                "type": "DiskPressure"
+            },
+            {
+                "lastHeartbeatTime": "2020-12-02T11:55:00Z",
+                "lastTransitionTime": "2020-11-06T09:38:26Z",
+                "message": "kubelet has sufficient PID available",
+                "reason": "KubeletHasSufficientPID",
+                "status": "False",
+                "type": "PIDPressure"
+            },
+            {
+                "lastHeartbeatTime": "2020-12-02T11:55:00Z",
+                "lastTransitionTime": "2020-12-02T10:55:58Z",
+                "message": "kubelet is posting ready status. AppArmor enabled",
+                "reason": "KubeletReady",
+                "status": "True",
+                "type": "Ready"
+            }
+        ],
+        "daemonEndpoints": {
+            "kubeletEndpoint": {
+                "Port": 10250
+            }
+        },
+        "images": [
+            {
+                "names": [
+                    "quay.io/cilium/cilium-builder@sha256:3387963039d5e570ecedc28a62aa406fcc9cab69bfd486f725ba2e690084ed62",
+                    "quay.io/cilium/cilium-builder:2020-07-20"
+                ],
+                "sizeBytes": 738895596
+            },
+            {
+                "names": [
+                    "istio/examples-bookinfo-productpage-v1@sha256:6b82529eb9a2feb335b6e50b66e73aa9e1aab9d65de7bb0b0a77ed6d559db5df",
+                    "istio/examples-bookinfo-productpage-v1:0.2.3"
+                ],
+                "sizeBytes": 696928021
+            },
+            {
+                "names": [
+                    "gcr.io/google-samples/gb-frontend@sha256:d44e7d7491a537f822e7fe8615437e4a8a08f3a7a1d7d4cb9066b92f7556ba6d",
+                    "gcr.io/google-samples/gb-frontend:v4"
+                ],
+                "sizeBytes": 512161546
+            },
+            {
+                "names": [
+                    "istio/examples-bookinfo-reviews-v1@sha256:e0b652146ca2f3dacc176a65f1f00bad2dc22bfbdcda29a0f328ac81fb010aa5",
+                    "istio/examples-bookinfo-reviews-v1:1.6.0"
+                ],
+                "sizeBytes": 511901707
+            },
+            {
+                "names": [
+                    "istio/examples-bookinfo-reviews-v2@sha256:b42f897f98b57d018a2e436ac612dd4b6d0c0324e263ff11cf2be2366164b592",
+                    "istio/examples-bookinfo-reviews-v2:1.6.0"
+                ],
+                "sizeBytes": 511901707
+            },
+            {
+                "names": [
+                    "spotify/kafkaproxy@sha256:6db604f81cd9b27360aa646b9ccb3dac6b9bad8d7108efebb35977e1e63f647d",
+                    "spotify/kafkaproxy:latest"
+                ],
+                "sizeBytes": 466718206
+            },
+            {
+                "names": [
+                    "cilium/cilium@sha256:3cbade4c15e7deba6b9a770475beec5e102a9f8e347c28307383a24581ebb6c4",
+                    "cilium/cilium:v1.8.5"
+                ],
+                "sizeBytes": 421109795
+            },
+            {
+                "names": [
+                    "cilium/cilium@sha256:662a3cefcfeda1869cb4213d6dc8d50073b13ee9ff136e4feff8b7cd0b99b463",
+                    "cilium/cilium:latest"
+                ],
+                "sizeBytes": 413013238
+            },
+            {
+                "names": [
+                    "wurstmeister/kafka@sha256:25faa704b2f10e9922b13532dd8942a3ea658b9c6bc4ea0c96ed348762de5701",
+                    "wurstmeister/kafka:2.11-0.11.0.3"
+                ],
+                "sizeBytes": 412920049
+            },
+            {
+                "names": [
+                    "cassandra@sha256:ce85468c5badfa2e0a04ae6825eee9421b42d9b12d1a781c0dd154f70d1ca288",
+                    "cassandra:3.11.3"
+                ],
+                "sizeBytes": 385783965
+            },
+            {
+                "names": [
+                    "gcr.io/google-samples/gb-frontend@sha256:35cb427341429fac3df10ff74600ea73e8ec0754d78f9ce89e0b4f3d70d53ba6",
+                    "gcr.io/google-samples/gb-frontend:v6"
+                ],
+                "sizeBytes": 373099368
+            },
+            {
+                "names": [
+                    "cilium/istio_proxy@sha256:202e21e3aea07de161b3ad71549b484819f8fb1ab913b03e44192e40999d8f45",
+                    "cilium/istio_proxy:1.5.7"
+                ],
+                "sizeBytes": 331094870
+            },
+            {
+                "names": [
+                    "cassandra@sha256:ce85468c5badfa2e0a04ae6825eee9421b42d9b12d1a781c0dd154f70d1ca288",
+                    "cassandra:3.11.3"
+                ],
+                "sizeBytes": 323145746
+            },
+            {
+                "names": [
+                    "cilium/kafkaclient@sha256:407fcf0e67d49785d128eaec456a9a82a226b75c451063628ceebeb0c6e38fda",
+                    "cilium/kafkaclient:latest"
+                ],
+                "sizeBytes": 265005585
+            },
+            {
+                "names": [
+                    "cilium/kafkaclient2@sha256:e62a4109ebeb0726e6c87815c42e12de82f883bb89235315318a2a1b0248fcfe",
+                    "cilium/kafkaclient2:latest"
+                ],
+                "sizeBytes": 265005244
+            },
+            {
+                "names": [
+                    "cilium/docs-builder:latest"
+                ],
+                "sizeBytes": 254244671
+            },
+            {
+                "names": [
+                    "istio/kubectl@sha256:8e7dfa8e60043c31ba682db138fd38274825124994dd3e2085e8f5e181458712",
+                    "istio/kubectl:1.4.3"
+                ],
+                "sizeBytes": 218445267
+            },
+            {
+                "names": [
+                    "cilium/istio_pilot@sha256:d58ac566c7fd985b27e904b025e029c2847d2a6c05658dfffdc54072205ab6d0",
+                    "cilium/istio_pilot:1.5.7"
+                ],
+                "sizeBytes": 228148092
+            },
+            {
+                "names": [
+                    "cilium/log-gatherer@sha256:10934464715c9e223b88251a13bb49ccb9ecdb7885b05e1fc9b9ef3c8d03355a",
+                    "cilium/log-gatherer:v1.0"
+                ],
+                "sizeBytes": 210082092
+            },
+            {
+                "names": [
+                    "quay.io/cilium/cilium-runtime@sha256:935a3a38fca019ac2ccde486593869c05c9936a01920d1ce90cf2232a71ad4d6",
+                    "quay.io/cilium/cilium-runtime:2020-07-20"
+                ],
+                "sizeBytes": 200148097
+            },
+            {
+                "names": [
+                    "cilium/docker-bind@sha256:aba71fbb189f9c4cbaa44976a99fa60b4f5adfc440fd36ee2a7ea38af717d39a",
+                    "cilium/docker-bind:v0.1"
+                ],
+                "sizeBytes": 182656853
+            },
+            {
+                "names": [
+                    "cilium/demo-httpd@sha256:647bc288a4ed0ac1c4361c76cc97171176edada2bf5f10946b7a84d2a7f33fe0",
+                    "cilium/demo-httpd:latest"
+                ],
+                "sizeBytes": 176927735
+            },
+            {
+                "names": [
+                    "cilium/json-mock@sha256:941e03da57551dd4a71f351b35650c152a1192ac1df717e43ee58b5aa2b8e241",
+                    "cilium/json-mock:1.2"
+                ],
+                "sizeBytes": 167893728
+            },
+            {
+                "names": [
+                    "cilium/docker-bind@sha256:cd0ddd0fd314853312d9dc7a57b970f8a6db74c0114c66793ccb66da56b52151",
+                    "cilium/docker-bind:v0.3"
+                ],
+                "sizeBytes": 162363700
+            },
+            {
+                "names": [
+                    "istio/examples-bookinfo-ratings-v1@sha256:5fbfd3a14fff229f15e689d07e5214bc5eb1e929766e45eda761cbc9ef7a5589",
+                    "istio/examples-bookinfo-ratings-v1:1.16.2"
+                ],
+                "sizeBytes": 160994212
+            },
+            {
+                "names": [
+                    "istio/examples-bookinfo-details-v1@sha256:18e54f81689035019e1ac78f6d2e6483fcf1d94072d047315ab193cb2ab89ae5",
+                    "istio/examples-bookinfo-details-v1:1.16.2"
+                ],
+                "sizeBytes": 149088489
+            },
+            {
+                "names": [
+                    "cilium/cc-grpc-demo@sha256:2264b0beeb404762376645f63b5eed63fe3e2c0fcef2d1a1532c456d8b5045bc",
+                    "cilium/cc-grpc-demo:v3.0"
+                ],
+                "sizeBytes": 147805935
+            },
+            {
+                "names": [
+                    "digitalwonderland/zookeeper@sha256:3942ff1981d0ff57e8faf48b45814c3f0d604a5c4dcd75ecbe114c7279dbf4ce",
+                    "digitalwonderland/zookeeper:latest"
+                ],
+                "sizeBytes": 144591659
+            },
+            {
+                "names": [
+                    "quay.io/coreos/etcd-operator@sha256:66a37fd61a06a43969854ee6d3e21087a98b93838e284a6086b13917f96b0d9b",
+                    "quay.io/coreos/etcd-operator:v0.9.4"
+                ],
+                "sizeBytes": 138980041
+            },
+            {
+                "names": [
+                    "prom/prometheus@sha256:cd93b8711bb92eb9c437d74217311519e0a93bc55779aa664325dc83cd13cb32",
+                    "prom/prometheus:v2.12.0"
+                ],
+                "sizeBytes": 138104805
+            },
+            {
+                "names": [
+                    "istio/proxy_init@sha256:cc7a7c9ea5b18785d889c3107bfd3ed4d547e61ae43683df72365d9ea24d9d82",
+                    "istio/proxy_init:1.2.4"
+                ],
+                "sizeBytes": 136691268
+            },
+            {
+                "names": [
+                    "gcr.io/google_samples/gb-redisslave@sha256:90f62695e641e1a27d1a5e0bbb8b622205a48e18311b51b0da419ffad24b9016",
+                    "gcr.io/google_samples/gb-redisslave:v1"
+                ],
+                "sizeBytes": 109508753
+            },
+            {
+                "names": [
+                    "redis@sha256:8a54dcc711406447b3631a81ef929f500e6836b43e7d61005fa27057882159da",
+                    "redis:4.0.1"
+                ],
+                "sizeBytes": 106629683
+            },
+            {
+                "names": [
+                    "gcr.io/google_samples/gb-redis-follower@sha256:952fc95230c5896e8e4044aa0f3dba95d09ae8a9e9cab044df34bbae74bb2bc3",
+                    "gcr.io/google_samples/gb-redis-follower:v2"
+                ],
+                "sizeBytes": 104124800
+            },
+            {
+                "names": [
+                    "redis@sha256:800f2587bf3376cb01e6307afe599ddce9439deafbd4fb8562829da96085c9c5",
+                    "redis:6.0.5"
+                ],
+                "sizeBytes": 104124452
+            },
+            {
+                "names": [
+                    "cilium/echoserver@sha256:daa2b422465b8714195fda33bc14865a8672c14963d0955c9d95632d6b804b63",
+                    "cilium/echoserver:1.10.1"
+                ],
+                "sizeBytes": 95364466
+            },
+            {
+                "names": [
+                    "istio/mixer@sha256:c8a52adf2825a6e59531808fda90fc92f7287292ef1aa94a480af761d1597f0d",
+                    "istio/mixer:1.4.3"
+                ],
+                "sizeBytes": 80476608
+            },
+            {
+                "names": [
+                    "cilium/dnssec-client@sha256:9d6b575e60c6903ff294238b9d0ad2ddf0bcde87539f07f2b50182f8d8d688b4",
+                    "cilium/dnssec-client:v0.2"
+                ],
+                "sizeBytes": 94145732
+            },
+            {
+                "names": [
+                    "covalentio/hubble-fgs:latest"
+                ],
+                "sizeBytes": 94047229
+            }
+        ],
+        "nodeInfo": {
+            "architecture": "amd64",
+            "bootID": "980c8a2d-d664-47f6-b2a9-faaa620c3cbb",
+            "containerRuntimeVersion": "docker://19.3.13",
+            "kernelVersion": "5.9.0+",
+            "kubeProxyVersion": "v1.19.3",
+            "kubeletVersion": "v1.19.3",
+            "machineID": "d3525ea31b454c058b9515963da47809",
+            "operatingSystem": "linux",
+            "osImage": "Ubuntu 18.04.5 LTS",
+            "systemUUID": "b92b6122-a005-4458-9b6d-71faa734c9fe"
+        }
+    }
+}

@@ -1,0 +1,1143 @@
+{
+  "paths": {
+    "healthz": {
+      "get": {
+        "consumes": [
+          "*/*"
+        ],
+        "produces": [
+          "application/json",
+          "application/text"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "format": "string"
+            }
+          }
+        },
+        "schemes": [
+          "http"
+        ],
+        "tags": [
+          "kubernetes"
+        ],
+        "operationId": "Healthz"
+      }
+    },
+    "/apis/cilium.io/v2/ciliumnodes": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "format": "binary"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "schemes": [
+          "http"
+        ],
+        "tags": [
+          "cilium"
+        ],
+        "operationId": "ListApisCiliumIoV2CiliumNodes"
+      },
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "format": "binary"
+            }
+          },
+          "201": {
+            "description": "Created",
+            "schema": {
+              "type": "object",
+              "format": "binary"
+            }
+          },
+          "202": {
+            "description": "Accepted",
+            "schema": {
+              "type": "object",
+              "format": "binary"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "schemes": [
+          "http"
+        ],
+        "tags": [
+          "cilium"
+        ],
+        "operationId": "PostApisCiliumIoV2CiliumNodes"
+      },
+      "parameters": [
+        {
+          "description": "allowWatchBookmarks requests watch events with type \"BOOKMARK\". Servers that do not implement bookmarks may ignore this flag and bookmarks are sent at the server's discretion. Clients should not assume bookmarks are returned at any specific interval, nor may they assume the server will send any BOOKMARK event during a session. If this is not a watch, this field is ignored. If the feature gate WatchBookmarks is not enabled in apiserver, this field is ignored.",
+          "in": "query",
+          "name": "allowWatchBookmarks",
+          "type": "boolean",
+          "uniqueItems": true
+        },
+        {
+          "description": "The continue option should be set when retrieving more results from the server. Since this value is server defined, clients may only use the continue value from a previous query result with identical query parameters (except for the value of continue) and the server may reject a continue value it does not recognize. If the specified continue value is no longer valid whether due to expiration (generally five to fifteen minutes) or a configuration change on the server, the server will respond with a 410 ResourceExpired error together with a continue token. If the client needs a consistent list, it must restart their list without the continue field. Otherwise, the client may send another list request with the token received with the 410 error, the server will respond with a list starting from the next key, but from the latest snapshot, which is inconsistent from the previous list results - objects that are created, modified, or deleted after the first list request will be included in the response, as long as their keys are after the \"next key\".\n\nThis field is not supported when watch is true. Clients may start a watch from the last resourceVersion value returned by the server and not miss any modifications.",
+          "in": "query",
+          "name": "continue",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "A selector to restrict the list of returned objects by their fields. Defaults to everything.",
+          "in": "query",
+          "name": "fieldSelector",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "A selector to restrict the list of returned objects by their labels. Defaults to everything.",
+          "in": "query",
+          "name": "labelSelector",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "limit is a maximum number of responses to return for a list call. If more items exist, the server will set the `continue` field on the list metadata to a value that can be used with the same initial query to retrieve the next set of results. Setting a limit may return fewer than the requested amount of items (up to zero items) in the event all requested objects are filtered out and clients should only use the presence of the continue field to determine whether more results are available. Servers may choose not to support the limit argument and will return all of the available results. If limit is specified and the continue field is empty, clients may assume that no more results are available. This field is not supported if watch is true.\n\nThe server guarantees that the objects returned when using continue will be identical to issuing a single list call without a limit - that is, no objects created, modified, or deleted after the first request is issued will be included in any subsequent continued requests. This is sometimes referred to as a consistent snapshot, and ensures that a client that is using limit to receive smaller chunks of a very large result can ensure they see all possible objects. If objects are updated during a chunked list the version of the object that was present at the time the first list result was calculated is returned.",
+          "in": "query",
+          "name": "limit",
+          "type": "integer",
+          "uniqueItems": true
+        },
+        {
+          "description": "If 'true', then the output is pretty printed.",
+          "in": "query",
+          "name": "pretty",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "resourceVersion sets a constraint on what resource versions a request may be served from. See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
+          "in": "query",
+          "name": "resourceVersion",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "resourceVersionMatch determines how resourceVersion is applied to list calls. It is highly recommended that resourceVersionMatch be set for list calls where resourceVersion is set See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
+          "in": "query",
+          "name": "resourceVersionMatch",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "Timeout for the list/watch call. This limits the duration of the call, regardless of any activity or inactivity.",
+          "in": "query",
+          "name": "timeoutSeconds",
+          "type": "integer",
+          "uniqueItems": true
+        },
+        {
+          "description": "Watch for changes to the described resources and return them as a stream of add, update, and remove notifications. Specify resourceVersion.",
+          "in": "query",
+          "name": "watch",
+          "type": "boolean",
+          "uniqueItems": true
+        }
+      ]
+    },
+    "/apis/cilium.io/v2/ciliumnodes/{name}": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "format": "binary"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "schemes": [
+          "http"
+        ],
+        "tags": [
+          "cilium"
+        ],
+        "operationId": "ReadApisCiliumIoV2CiliumNode"
+      },
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "format": "binary"
+            }
+          },
+          "201": {
+            "description": "Created",
+            "schema": {
+              "type": "object",
+              "format": "binary"
+            }
+          },
+          "202": {
+            "description": "Accepted",
+            "schema": {
+              "type": "object",
+              "format": "binary"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "schemes": [
+          "http"
+        ],
+        "tags": [
+          "cilium"
+        ],
+        "operationId": "PutApisCiliumIoV2CiliumNodes"
+      },
+      "parameters": [
+        {
+          "description": "name of the Cilium Node",
+          "in": "path",
+          "name": "name",
+          "required": true,
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "allowWatchBookmarks requests watch events with type \"BOOKMARK\". Servers that do not implement bookmarks may ignore this flag and bookmarks are sent at the server's discretion. Clients should not assume bookmarks are returned at any specific interval, nor may they assume the server will send any BOOKMARK event during a session. If this is not a watch, this field is ignored. If the feature gate WatchBookmarks is not enabled in apiserver, this field is ignored.",
+          "in": "query",
+          "name": "allowWatchBookmarks",
+          "type": "boolean",
+          "uniqueItems": true
+        },
+        {
+          "description": "The continue option should be set when retrieving more results from the server. Since this value is server defined, clients may only use the continue value from a previous query result with identical query parameters (except for the value of continue) and the server may reject a continue value it does not recognize. If the specified continue value is no longer valid whether due to expiration (generally five to fifteen minutes) or a configuration change on the server, the server will respond with a 410 ResourceExpired error together with a continue token. If the client needs a consistent list, it must restart their list without the continue field. Otherwise, the client may send another list request with the token received with the 410 error, the server will respond with a list starting from the next key, but from the latest snapshot, which is inconsistent from the previous list results - objects that are created, modified, or deleted after the first list request will be included in the response, as long as their keys are after the \"next key\".\n\nThis field is not supported when watch is true. Clients may start a watch from the last resourceVersion value returned by the server and not miss any modifications.",
+          "in": "query",
+          "name": "continue",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "A selector to restrict the list of returned objects by their fields. Defaults to everything.",
+          "in": "query",
+          "name": "fieldSelector",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "A selector to restrict the list of returned objects by their labels. Defaults to everything.",
+          "in": "query",
+          "name": "labelSelector",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "limit is a maximum number of responses to return for a list call. If more items exist, the server will set the `continue` field on the list metadata to a value that can be used with the same initial query to retrieve the next set of results. Setting a limit may return fewer than the requested amount of items (up to zero items) in the event all requested objects are filtered out and clients should only use the presence of the continue field to determine whether more results are available. Servers may choose not to support the limit argument and will return all of the available results. If limit is specified and the continue field is empty, clients may assume that no more results are available. This field is not supported if watch is true.\n\nThe server guarantees that the objects returned when using continue will be identical to issuing a single list call without a limit - that is, no objects created, modified, or deleted after the first request is issued will be included in any subsequent continued requests. This is sometimes referred to as a consistent snapshot, and ensures that a client that is using limit to receive smaller chunks of a very large result can ensure they see all possible objects. If objects are updated during a chunked list the version of the object that was present at the time the first list result was calculated is returned.",
+          "in": "query",
+          "name": "limit",
+          "type": "integer",
+          "uniqueItems": true
+        },
+        {
+          "description": "If 'true', then the output is pretty printed.",
+          "in": "query",
+          "name": "pretty",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "resourceVersion sets a constraint on what resource versions a request may be served from. See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
+          "in": "query",
+          "name": "resourceVersion",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "resourceVersionMatch determines how resourceVersion is applied to list calls. It is highly recommended that resourceVersionMatch be set for list calls where resourceVersion is set See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
+          "in": "query",
+          "name": "resourceVersionMatch",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "Timeout for the list/watch call. This limits the duration of the call, regardless of any activity or inactivity.",
+          "in": "query",
+          "name": "timeoutSeconds",
+          "type": "integer",
+          "uniqueItems": true
+        },
+        {
+          "description": "Watch for changes to the described resources and return them as a stream of add, update, and remove notifications. Specify resourceVersion.",
+          "in": "query",
+          "name": "watch",
+          "type": "boolean",
+          "uniqueItems": true
+        }
+      ]
+    },
+    "/apis/cilium.io/v2/ciliumidentities/{name}/status": {
+      "patch": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "format": "binary"
+            }
+          },
+          "201": {
+            "description": "Created",
+            "schema": {
+              "type": "object",
+              "format": "binary"
+            }
+          },
+          "202": {
+            "description": "Accepted",
+            "schema": {
+              "type": "object",
+              "format": "binary"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "schemes": [
+          "http"
+        ],
+        "tags": [
+          "cilium"
+        ],
+        "operationId": "PatchApisCiliumIoV2CiliumIdentityStatus"
+      },
+      "parameters": [
+        {
+          "description": "name of the Cilium Identity",
+          "in": "path",
+          "name": "name",
+          "required": true,
+          "type": "string",
+          "uniqueItems": true
+        }
+      ]
+    },
+    "/apis/cilium.io/v2/namespaces/{namespace}/ciliumendpoints/{name}": {
+      "delete": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "format": "binary"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "schemes": [
+          "http"
+        ],
+        "tags": [
+          "cilium"
+        ],
+        "operationId": "DeleteApisCiliumIoV2CiliumEndpoint"
+      },
+      "parameters": [
+        {
+          "description": "namespace of the Cilium Endpoint",
+          "in": "path",
+          "name": "namespace",
+          "required": true,
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "name of the Cilium Endpoint",
+          "in": "path",
+          "name": "name",
+          "required": true,
+          "type": "string",
+          "uniqueItems": true
+        }
+      ]
+    },
+    "/apis/cilium.io/v2/namespaces/{namespace}/ciliumendpoints/{name}/status": {
+      "patch": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "format": "binary"
+            }
+          },
+          "201": {
+            "description": "Created",
+            "schema": {
+              "type": "object",
+              "format": "binary"
+            }
+          },
+          "202": {
+            "description": "Accepted",
+            "schema": {
+              "type": "object",
+              "format": "binary"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "schemes": [
+          "http"
+        ],
+        "tags": [
+          "cilium"
+        ],
+        "operationId": "PatchApisCiliumIoV2CiliumEndpointStatus"
+      },
+      "parameters": [
+        {
+          "description": "namespace of the Cilium Endpoint",
+          "in": "path",
+          "name": "namespace",
+          "required": true,
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "name of the Cilium Endpoint",
+          "in": "path",
+          "name": "name",
+          "required": true,
+          "type": "string",
+          "uniqueItems": true
+        }
+      ]
+    },
+    "/apis/cilium.io/v2/namespaces/{namespace}/ciliumendpoints": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "format": "binary"
+            }
+          },
+          "201": {
+            "description": "Created",
+            "schema": {
+              "type": "object",
+              "format": "binary"
+            }
+          },
+          "202": {
+            "description": "Accepted",
+            "schema": {
+              "type": "object",
+              "format": "binary"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "schemes": [
+          "http"
+        ],
+        "tags": [
+          "cilium"
+        ],
+        "operationId": "PostApisCiliumIoV2CiliumEndpoint"
+      },
+      "parameters": [
+        {
+          "description": "namespace of the Cilium Endpoint",
+          "in": "path",
+          "name": "namespace",
+          "required": true,
+          "type": "string",
+          "uniqueItems": true
+        }
+      ]
+    },
+    "/apis/cilium.io/v2/ciliumclusterwidenetworkpolicies": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "format": "binary"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "schemes": [
+          "http"
+        ],
+        "tags": [
+          "cilium"
+        ],
+        "operationId": "ListApisCiliumIoV2CiliumClusterwideNetworkPolicy"
+      },
+      "parameters": [
+        {
+          "description": "allowWatchBookmarks requests watch events with type \"BOOKMARK\". Servers that do not implement bookmarks may ignore this flag and bookmarks are sent at the server's discretion. Clients should not assume bookmarks are returned at any specific interval, nor may they assume the server will send any BOOKMARK event during a session. If this is not a watch, this field is ignored. If the feature gate WatchBookmarks is not enabled in apiserver, this field is ignored.",
+          "in": "query",
+          "name": "allowWatchBookmarks",
+          "type": "boolean",
+          "uniqueItems": true
+        },
+        {
+          "description": "The continue option should be set when retrieving more results from the server. Since this value is server defined, clients may only use the continue value from a previous query result with identical query parameters (except for the value of continue) and the server may reject a continue value it does not recognize. If the specified continue value is no longer valid whether due to expiration (generally five to fifteen minutes) or a configuration change on the server, the server will respond with a 410 ResourceExpired error together with a continue token. If the client needs a consistent list, it must restart their list without the continue field. Otherwise, the client may send another list request with the token received with the 410 error, the server will respond with a list starting from the next key, but from the latest snapshot, which is inconsistent from the previous list results - objects that are created, modified, or deleted after the first list request will be included in the response, as long as their keys are after the \"next key\".\n\nThis field is not supported when watch is true. Clients may start a watch from the last resourceVersion value returned by the server and not miss any modifications.",
+          "in": "query",
+          "name": "continue",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "A selector to restrict the list of returned objects by their fields. Defaults to everything.",
+          "in": "query",
+          "name": "fieldSelector",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "A selector to restrict the list of returned objects by their labels. Defaults to everything.",
+          "in": "query",
+          "name": "labelSelector",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "limit is a maximum number of responses to return for a list call. If more items exist, the server will set the `continue` field on the list metadata to a value that can be used with the same initial query to retrieve the next set of results. Setting a limit may return fewer than the requested amount of items (up to zero items) in the event all requested objects are filtered out and clients should only use the presence of the continue field to determine whether more results are available. Servers may choose not to support the limit argument and will return all of the available results. If limit is specified and the continue field is empty, clients may assume that no more results are available. This field is not supported if watch is true.\n\nThe server guarantees that the objects returned when using continue will be identical to issuing a single list call without a limit - that is, no objects created, modified, or deleted after the first request is issued will be included in any subsequent continued requests. This is sometimes referred to as a consistent snapshot, and ensures that a client that is using limit to receive smaller chunks of a very large result can ensure they see all possible objects. If objects are updated during a chunked list the version of the object that was present at the time the first list result was calculated is returned.",
+          "in": "query",
+          "name": "limit",
+          "type": "integer",
+          "uniqueItems": true
+        },
+        {
+          "description": "If 'true', then the output is pretty printed.",
+          "in": "query",
+          "name": "pretty",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "resourceVersion sets a constraint on what resource versions a request may be served from. See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
+          "in": "query",
+          "name": "resourceVersion",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "resourceVersionMatch determines how resourceVersion is applied to list calls. It is highly recommended that resourceVersionMatch be set for list calls where resourceVersion is set See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
+          "in": "query",
+          "name": "resourceVersionMatch",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "Timeout for the list/watch call. This limits the duration of the call, regardless of any activity or inactivity.",
+          "in": "query",
+          "name": "timeoutSeconds",
+          "type": "integer",
+          "uniqueItems": true
+        },
+        {
+          "description": "Watch for changes to the described resources and return them as a stream of add, update, and remove notifications. Specify resourceVersion.",
+          "in": "query",
+          "name": "watch",
+          "type": "boolean",
+          "uniqueItems": true
+        }
+      ]
+    },
+    "/apis/cilium.io/v2/ciliumnetworkpolicies": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "format": "binary"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "schemes": [
+          "http"
+        ],
+        "tags": [
+          "cilium"
+        ],
+        "operationId": "ListApisCiliumIoV2CiliumNetworkPolicy"
+      },
+      "parameters": [
+        {
+          "description": "allowWatchBookmarks requests watch events with type \"BOOKMARK\". Servers that do not implement bookmarks may ignore this flag and bookmarks are sent at the server's discretion. Clients should not assume bookmarks are returned at any specific interval, nor may they assume the server will send any BOOKMARK event during a session. If this is not a watch, this field is ignored. If the feature gate WatchBookmarks is not enabled in apiserver, this field is ignored.",
+          "in": "query",
+          "name": "allowWatchBookmarks",
+          "type": "boolean",
+          "uniqueItems": true
+        },
+        {
+          "description": "The continue option should be set when retrieving more results from the server. Since this value is server defined, clients may only use the continue value from a previous query result with identical query parameters (except for the value of continue) and the server may reject a continue value it does not recognize. If the specified continue value is no longer valid whether due to expiration (generally five to fifteen minutes) or a configuration change on the server, the server will respond with a 410 ResourceExpired error together with a continue token. If the client needs a consistent list, it must restart their list without the continue field. Otherwise, the client may send another list request with the token received with the 410 error, the server will respond with a list starting from the next key, but from the latest snapshot, which is inconsistent from the previous list results - objects that are created, modified, or deleted after the first list request will be included in the response, as long as their keys are after the \"next key\".\n\nThis field is not supported when watch is true. Clients may start a watch from the last resourceVersion value returned by the server and not miss any modifications.",
+          "in": "query",
+          "name": "continue",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "A selector to restrict the list of returned objects by their fields. Defaults to everything.",
+          "in": "query",
+          "name": "fieldSelector",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "A selector to restrict the list of returned objects by their labels. Defaults to everything.",
+          "in": "query",
+          "name": "labelSelector",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "limit is a maximum number of responses to return for a list call. If more items exist, the server will set the `continue` field on the list metadata to a value that can be used with the same initial query to retrieve the next set of results. Setting a limit may return fewer than the requested amount of items (up to zero items) in the event all requested objects are filtered out and clients should only use the presence of the continue field to determine whether more results are available. Servers may choose not to support the limit argument and will return all of the available results. If limit is specified and the continue field is empty, clients may assume that no more results are available. This field is not supported if watch is true.\n\nThe server guarantees that the objects returned when using continue will be identical to issuing a single list call without a limit - that is, no objects created, modified, or deleted after the first request is issued will be included in any subsequent continued requests. This is sometimes referred to as a consistent snapshot, and ensures that a client that is using limit to receive smaller chunks of a very large result can ensure they see all possible objects. If objects are updated during a chunked list the version of the object that was present at the time the first list result was calculated is returned.",
+          "in": "query",
+          "name": "limit",
+          "type": "integer",
+          "uniqueItems": true
+        },
+        {
+          "description": "If 'true', then the output is pretty printed.",
+          "in": "query",
+          "name": "pretty",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "resourceVersion sets a constraint on what resource versions a request may be served from. See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
+          "in": "query",
+          "name": "resourceVersion",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "resourceVersionMatch determines how resourceVersion is applied to list calls. It is highly recommended that resourceVersionMatch be set for list calls where resourceVersion is set See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
+          "in": "query",
+          "name": "resourceVersionMatch",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "Timeout for the list/watch call. This limits the duration of the call, regardless of any activity or inactivity.",
+          "in": "query",
+          "name": "timeoutSeconds",
+          "type": "integer",
+          "uniqueItems": true
+        },
+        {
+          "description": "Watch for changes to the described resources and return them as a stream of add, update, and remove notifications. Specify resourceVersion.",
+          "in": "query",
+          "name": "watch",
+          "type": "boolean",
+          "uniqueItems": true
+        }
+      ]
+    },
+    "/apis/cilium.io/v2/ciliumidentities": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "format": "binary"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "schemes": [
+          "http"
+        ],
+        "tags": [
+          "cilium"
+        ],
+        "operationId": "ListApisCiliumIoV2CiliumIdentity"
+      },
+      "parameters": [
+        {
+          "description": "allowWatchBookmarks requests watch events with type \"BOOKMARK\". Servers that do not implement bookmarks may ignore this flag and bookmarks are sent at the server's discretion. Clients should not assume bookmarks are returned at any specific interval, nor may they assume the server will send any BOOKMARK event during a session. If this is not a watch, this field is ignored. If the feature gate WatchBookmarks is not enabled in apiserver, this field is ignored.",
+          "in": "query",
+          "name": "allowWatchBookmarks",
+          "type": "boolean",
+          "uniqueItems": true
+        },
+        {
+          "description": "The continue option should be set when retrieving more results from the server. Since this value is server defined, clients may only use the continue value from a previous query result with identical query parameters (except for the value of continue) and the server may reject a continue value it does not recognize. If the specified continue value is no longer valid whether due to expiration (generally five to fifteen minutes) or a configuration change on the server, the server will respond with a 410 ResourceExpired error together with a continue token. If the client needs a consistent list, it must restart their list without the continue field. Otherwise, the client may send another list request with the token received with the 410 error, the server will respond with a list starting from the next key, but from the latest snapshot, which is inconsistent from the previous list results - objects that are created, modified, or deleted after the first list request will be included in the response, as long as their keys are after the \"next key\".\n\nThis field is not supported when watch is true. Clients may start a watch from the last resourceVersion value returned by the server and not miss any modifications.",
+          "in": "query",
+          "name": "continue",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "A selector to restrict the list of returned objects by their fields. Defaults to everything.",
+          "in": "query",
+          "name": "fieldSelector",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "A selector to restrict the list of returned objects by their labels. Defaults to everything.",
+          "in": "query",
+          "name": "labelSelector",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "limit is a maximum number of responses to return for a list call. If more items exist, the server will set the `continue` field on the list metadata to a value that can be used with the same initial query to retrieve the next set of results. Setting a limit may return fewer than the requested amount of items (up to zero items) in the event all requested objects are filtered out and clients should only use the presence of the continue field to determine whether more results are available. Servers may choose not to support the limit argument and will return all of the available results. If limit is specified and the continue field is empty, clients may assume that no more results are available. This field is not supported if watch is true.\n\nThe server guarantees that the objects returned when using continue will be identical to issuing a single list call without a limit - that is, no objects created, modified, or deleted after the first request is issued will be included in any subsequent continued requests. This is sometimes referred to as a consistent snapshot, and ensures that a client that is using limit to receive smaller chunks of a very large result can ensure they see all possible objects. If objects are updated during a chunked list the version of the object that was present at the time the first list result was calculated is returned.",
+          "in": "query",
+          "name": "limit",
+          "type": "integer",
+          "uniqueItems": true
+        },
+        {
+          "description": "If 'true', then the output is pretty printed.",
+          "in": "query",
+          "name": "pretty",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "resourceVersion sets a constraint on what resource versions a request may be served from. See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
+          "in": "query",
+          "name": "resourceVersion",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "resourceVersionMatch determines how resourceVersion is applied to list calls. It is highly recommended that resourceVersionMatch be set for list calls where resourceVersion is set See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
+          "in": "query",
+          "name": "resourceVersionMatch",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "Timeout for the list/watch call. This limits the duration of the call, regardless of any activity or inactivity.",
+          "in": "query",
+          "name": "timeoutSeconds",
+          "type": "integer",
+          "uniqueItems": true
+        },
+        {
+          "description": "Watch for changes to the described resources and return them as a stream of add, update, and remove notifications. Specify resourceVersion.",
+          "in": "query",
+          "name": "watch",
+          "type": "boolean",
+          "uniqueItems": true
+        }
+      ]
+    },
+    "/apis/cilium.io/v2/ciliumendpoints": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "format": "binary"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "schemes": [
+          "http"
+        ],
+        "tags": [
+          "cilium"
+        ],
+        "operationId": "ListApisCiliumIoV2CiliumEndpoint"
+      },
+      "parameters": [
+        {
+          "description": "allowWatchBookmarks requests watch events with type \"BOOKMARK\". Servers that do not implement bookmarks may ignore this flag and bookmarks are sent at the server's discretion. Clients should not assume bookmarks are returned at any specific interval, nor may they assume the server will send any BOOKMARK event during a session. If this is not a watch, this field is ignored. If the feature gate WatchBookmarks is not enabled in apiserver, this field is ignored.",
+          "in": "query",
+          "name": "allowWatchBookmarks",
+          "type": "boolean",
+          "uniqueItems": true
+        },
+        {
+          "description": "The continue option should be set when retrieving more results from the server. Since this value is server defined, clients may only use the continue value from a previous query result with identical query parameters (except for the value of continue) and the server may reject a continue value it does not recognize. If the specified continue value is no longer valid whether due to expiration (generally five to fifteen minutes) or a configuration change on the server, the server will respond with a 410 ResourceExpired error together with a continue token. If the client needs a consistent list, it must restart their list without the continue field. Otherwise, the client may send another list request with the token received with the 410 error, the server will respond with a list starting from the next key, but from the latest snapshot, which is inconsistent from the previous list results - objects that are created, modified, or deleted after the first list request will be included in the response, as long as their keys are after the \"next key\".\n\nThis field is not supported when watch is true. Clients may start a watch from the last resourceVersion value returned by the server and not miss any modifications.",
+          "in": "query",
+          "name": "continue",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "A selector to restrict the list of returned objects by their fields. Defaults to everything.",
+          "in": "query",
+          "name": "fieldSelector",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "A selector to restrict the list of returned objects by their labels. Defaults to everything.",
+          "in": "query",
+          "name": "labelSelector",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "limit is a maximum number of responses to return for a list call. If more items exist, the server will set the `continue` field on the list metadata to a value that can be used with the same initial query to retrieve the next set of results. Setting a limit may return fewer than the requested amount of items (up to zero items) in the event all requested objects are filtered out and clients should only use the presence of the continue field to determine whether more results are available. Servers may choose not to support the limit argument and will return all of the available results. If limit is specified and the continue field is empty, clients may assume that no more results are available. This field is not supported if watch is true.\n\nThe server guarantees that the objects returned when using continue will be identical to issuing a single list call without a limit - that is, no objects created, modified, or deleted after the first request is issued will be included in any subsequent continued requests. This is sometimes referred to as a consistent snapshot, and ensures that a client that is using limit to receive smaller chunks of a very large result can ensure they see all possible objects. If objects are updated during a chunked list the version of the object that was present at the time the first list result was calculated is returned.",
+          "in": "query",
+          "name": "limit",
+          "type": "integer",
+          "uniqueItems": true
+        },
+        {
+          "description": "If 'true', then the output is pretty printed.",
+          "in": "query",
+          "name": "pretty",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "resourceVersion sets a constraint on what resource versions a request may be served from. See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
+          "in": "query",
+          "name": "resourceVersion",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "resourceVersionMatch determines how resourceVersion is applied to list calls. It is highly recommended that resourceVersionMatch be set for list calls where resourceVersion is set See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
+          "in": "query",
+          "name": "resourceVersionMatch",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "Timeout for the list/watch call. This limits the duration of the call, regardless of any activity or inactivity.",
+          "in": "query",
+          "name": "timeoutSeconds",
+          "type": "integer",
+          "uniqueItems": true
+        },
+        {
+          "description": "Watch for changes to the described resources and return them as a stream of add, update, and remove notifications. Specify resourceVersion.",
+          "in": "query",
+          "name": "watch",
+          "type": "boolean",
+          "uniqueItems": true
+        }
+      ]
+    },
+    "/apis/cilium.io/v2/ciliumclusterwidelocalredirectpolicy": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "format": "binary"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "schemes": [
+          "http"
+        ],
+        "tags": [
+          "cilium"
+        ],
+        "operationId": "ListApisCiliumIoV2CiliumClusterwideLocalRedirectPolicy"
+      },
+      "parameters": [
+        {
+          "description": "allowWatchBookmarks requests watch events with type \"BOOKMARK\". Servers that do not implement bookmarks may ignore this flag and bookmarks are sent at the server's discretion. Clients should not assume bookmarks are returned at any specific interval, nor may they assume the server will send any BOOKMARK event during a session. If this is not a watch, this field is ignored. If the feature gate WatchBookmarks is not enabled in apiserver, this field is ignored.",
+          "in": "query",
+          "name": "allowWatchBookmarks",
+          "type": "boolean",
+          "uniqueItems": true
+        },
+        {
+          "description": "The continue option should be set when retrieving more results from the server. Since this value is server defined, clients may only use the continue value from a previous query result with identical query parameters (except for the value of continue) and the server may reject a continue value it does not recognize. If the specified continue value is no longer valid whether due to expiration (generally five to fifteen minutes) or a configuration change on the server, the server will respond with a 410 ResourceExpired error together with a continue token. If the client needs a consistent list, it must restart their list without the continue field. Otherwise, the client may send another list request with the token received with the 410 error, the server will respond with a list starting from the next key, but from the latest snapshot, which is inconsistent from the previous list results - objects that are created, modified, or deleted after the first list request will be included in the response, as long as their keys are after the \"next key\".\n\nThis field is not supported when watch is true. Clients may start a watch from the last resourceVersion value returned by the server and not miss any modifications.",
+          "in": "query",
+          "name": "continue",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "A selector to restrict the list of returned objects by their fields. Defaults to everything.",
+          "in": "query",
+          "name": "fieldSelector",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "A selector to restrict the list of returned objects by their labels. Defaults to everything.",
+          "in": "query",
+          "name": "labelSelector",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "limit is a maximum number of responses to return for a list call. If more items exist, the server will set the `continue` field on the list metadata to a value that can be used with the same initial query to retrieve the next set of results. Setting a limit may return fewer than the requested amount of items (up to zero items) in the event all requested objects are filtered out and clients should only use the presence of the continue field to determine whether more results are available. Servers may choose not to support the limit argument and will return all of the available results. If limit is specified and the continue field is empty, clients may assume that no more results are available. This field is not supported if watch is true.\n\nThe server guarantees that the objects returned when using continue will be identical to issuing a single list call without a limit - that is, no objects created, modified, or deleted after the first request is issued will be included in any subsequent continued requests. This is sometimes referred to as a consistent snapshot, and ensures that a client that is using limit to receive smaller chunks of a very large result can ensure they see all possible objects. If objects are updated during a chunked list the version of the object that was present at the time the first list result was calculated is returned.",
+          "in": "query",
+          "name": "limit",
+          "type": "integer",
+          "uniqueItems": true
+        },
+        {
+          "description": "If 'true', then the output is pretty printed.",
+          "in": "query",
+          "name": "pretty",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "resourceVersion sets a constraint on what resource versions a request may be served from. See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
+          "in": "query",
+          "name": "resourceVersion",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "resourceVersionMatch determines how resourceVersion is applied to list calls. It is highly recommended that resourceVersionMatch be set for list calls where resourceVersion is set See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
+          "in": "query",
+          "name": "resourceVersionMatch",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "Timeout for the list/watch call. This limits the duration of the call, regardless of any activity or inactivity.",
+          "in": "query",
+          "name": "timeoutSeconds",
+          "type": "integer",
+          "uniqueItems": true
+        },
+        {
+          "description": "Watch for changes to the described resources and return them as a stream of add, update, and remove notifications. Specify resourceVersion.",
+          "in": "query",
+          "name": "watch",
+          "type": "boolean",
+          "uniqueItems": true
+        }
+      ]
+    },
+    "/apis/cilium.io/v2/ciliumlocalredirectpolicy": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "format": "binary"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "schemes": [
+          "http"
+        ],
+        "tags": [
+          "cilium"
+        ],
+        "operationId": "ListApisCiliumIoV2CiliumLocalRedirectPolicy"
+      },
+      "parameters": [
+        {
+          "description": "allowWatchBookmarks requests watch events with type \"BOOKMARK\". Servers that do not implement bookmarks may ignore this flag and bookmarks are sent at the server's discretion. Clients should not assume bookmarks are returned at any specific interval, nor may they assume the server will send any BOOKMARK event during a session. If this is not a watch, this field is ignored. If the feature gate WatchBookmarks is not enabled in apiserver, this field is ignored.",
+          "in": "query",
+          "name": "allowWatchBookmarks",
+          "type": "boolean",
+          "uniqueItems": true
+        },
+        {
+          "description": "The continue option should be set when retrieving more results from the server. Since this value is server defined, clients may only use the continue value from a previous query result with identical query parameters (except for the value of continue) and the server may reject a continue value it does not recognize. If the specified continue value is no longer valid whether due to expiration (generally five to fifteen minutes) or a configuration change on the server, the server will respond with a 410 ResourceExpired error together with a continue token. If the client needs a consistent list, it must restart their list without the continue field. Otherwise, the client may send another list request with the token received with the 410 error, the server will respond with a list starting from the next key, but from the latest snapshot, which is inconsistent from the previous list results - objects that are created, modified, or deleted after the first list request will be included in the response, as long as their keys are after the \"next key\".\n\nThis field is not supported when watch is true. Clients may start a watch from the last resourceVersion value returned by the server and not miss any modifications.",
+          "in": "query",
+          "name": "continue",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "A selector to restrict the list of returned objects by their fields. Defaults to everything.",
+          "in": "query",
+          "name": "fieldSelector",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "A selector to restrict the list of returned objects by their labels. Defaults to everything.",
+          "in": "query",
+          "name": "labelSelector",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "limit is a maximum number of responses to return for a list call. If more items exist, the server will set the `continue` field on the list metadata to a value that can be used with the same initial query to retrieve the next set of results. Setting a limit may return fewer than the requested amount of items (up to zero items) in the event all requested objects are filtered out and clients should only use the presence of the continue field to determine whether more results are available. Servers may choose not to support the limit argument and will return all of the available results. If limit is specified and the continue field is empty, clients may assume that no more results are available. This field is not supported if watch is true.\n\nThe server guarantees that the objects returned when using continue will be identical to issuing a single list call without a limit - that is, no objects created, modified, or deleted after the first request is issued will be included in any subsequent continued requests. This is sometimes referred to as a consistent snapshot, and ensures that a client that is using limit to receive smaller chunks of a very large result can ensure they see all possible objects. If objects are updated during a chunked list the version of the object that was present at the time the first list result was calculated is returned.",
+          "in": "query",
+          "name": "limit",
+          "type": "integer",
+          "uniqueItems": true
+        },
+        {
+          "description": "If 'true', then the output is pretty printed.",
+          "in": "query",
+          "name": "pretty",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "resourceVersion sets a constraint on what resource versions a request may be served from. See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
+          "in": "query",
+          "name": "resourceVersion",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "resourceVersionMatch determines how resourceVersion is applied to list calls. It is highly recommended that resourceVersionMatch be set for list calls where resourceVersion is set See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
+          "in": "query",
+          "name": "resourceVersionMatch",
+          "type": "string",
+          "uniqueItems": true
+        },
+        {
+          "description": "Timeout for the list/watch call. This limits the duration of the call, regardless of any activity or inactivity.",
+          "in": "query",
+          "name": "timeoutSeconds",
+          "type": "integer",
+          "uniqueItems": true
+        },
+        {
+          "description": "Watch for changes to the described resources and return them as a stream of add, update, and remove notifications. Specify resourceVersion.",
+          "in": "query",
+          "name": "watch",
+          "type": "boolean",
+          "uniqueItems": true
+        }
+      ]
+    }
+  }
+}

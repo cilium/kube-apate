@@ -1,0 +1,74 @@
+{
+    "apiVersion": "v1",
+    "kind": "Service",
+    "metadata": {
+        "annotations": {
+            "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Service\",\"metadata\":{\"annotations\":{},\"labels\":{\"k8s-app.guestbook\":\"web\"},\"name\":\"guestbook\",\"namespace\":\"default\"},\"spec\":{\"ports\":[{\"port\":80,\"targetPort\":\"http-server\"}],\"selector\":{\"k8s-app.guestbook\":\"web\"}}}\n"
+        },
+        "creationTimestamp": "2020-04-03T21:13:46Z",
+        "labels": {
+            "k8s-app.guestbook": "web"
+        },
+        "managedFields": [
+            {
+                "apiVersion": "v1",
+                "fieldsType": "FieldsV1",
+                "fieldsV1": {
+                    "f:metadata": {
+                        "f:annotations": {
+                            ".": {},
+                            "f:kubectl.kubernetes.io/last-applied-configuration": {}
+                        },
+                        "f:labels": {
+                            ".": {},
+                            "f:k8s-app.guestbook": {}
+                        }
+                    },
+                    "f:spec": {
+                        "f:ports": {
+                            ".": {},
+                            "k:{\"port\":80,\"protocol\":\"TCP\"}": {
+                                ".": {},
+                                "f:port": {},
+                                "f:protocol": {},
+                                "f:targetPort": {}
+                            }
+                        },
+                        "f:selector": {
+                            ".": {},
+                            "f:k8s-app.guestbook": {}
+                        },
+                        "f:sessionAffinity": {},
+                        "f:type": {}
+                    }
+                },
+                "manager": "kubectl",
+                "operation": "Update",
+                "time": "2020-04-03T21:13:46Z"
+            }
+        ],
+        "name": "guestbook",
+        "namespace": "default",
+        "resourceVersion": "67402",
+        "selfLink": "/api/v1/namespaces/default/services/guestbook",
+        "uid": "10419705-5958-4d1a-868a-75216dbc9696"
+    },
+    "spec": {
+        "clusterIP": "172.20.0.76",
+        "ports": [
+            {
+                "port": 80,
+                "protocol": "TCP",
+                "targetPort": "http-server"
+            }
+        ],
+        "selector": {
+            "k8s-app.guestbook": "web"
+        },
+        "sessionAffinity": "None",
+        "type": "ClusterIP"
+    },
+    "status": {
+        "loadBalancer": {}
+    }
+}

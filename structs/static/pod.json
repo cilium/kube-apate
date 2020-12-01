@@ -1,0 +1,255 @@
+{
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "metadata": {
+        "creationTimestamp": "2020-04-08T10:22:23Z",
+        "generateName": "front-a-1-cdbc49684-",
+        "labels": {
+            "app": "front-a-1",
+            "pod-template-hash": "cdbc49684",
+            "random-label-1": "thequickbrownfoxjumpsoverthelazydog-1",
+            "random-label-10": "thequickbrownfoxjumpsoverthelazydog-10",
+            "random-label-2": "thequickbrownfoxjumpsoverthelazydog-2",
+            "random-label-3": "thequickbrownfoxjumpsoverthelazydog-3",
+            "random-label-4": "thequickbrownfoxjumpsoverthelazydog-4",
+            "random-label-5": "thequickbrownfoxjumpsoverthelazydog-5",
+            "random-label-6": "thequickbrownfoxjumpsoverthelazydog-6",
+            "random-label-7": "thequickbrownfoxjumpsoverthelazydog-7",
+            "random-label-8": "thequickbrownfoxjumpsoverthelazydog-8",
+            "random-label-9": "thequickbrownfoxjumpsoverthelazydog-9"
+        },
+        "managedFields": [
+            {
+                "apiVersion": "v1",
+                "fieldsType": "FieldsV1",
+                "fieldsV1": {
+                    "f:metadata": {
+                        "f:generateName": {},
+                        "f:labels": {
+                            ".": {},
+                            "f:app": {},
+                            "f:pod-template-hash": {},
+                            "f:random-label-1": {},
+                            "f:random-label-10": {},
+                            "f:random-label-2": {},
+                            "f:random-label-3": {},
+                            "f:random-label-4": {},
+                            "f:random-label-5": {},
+                            "f:random-label-6": {},
+                            "f:random-label-7": {},
+                            "f:random-label-8": {},
+                            "f:random-label-9": {}
+                        },
+                        "f:ownerReferences": {
+                            ".": {},
+                            "k:{\"uid\":\"d5518a2c-9844-450b-a333-b9ced431f8a5\"}": {
+                                ".": {},
+                                "f:apiVersion": {},
+                                "f:blockOwnerDeletion": {},
+                                "f:controller": {},
+                                "f:kind": {},
+                                "f:name": {},
+                                "f:uid": {}
+                            }
+                        }
+                    },
+                    "f:spec": {
+                        "f:containers": {
+                            "k:{\"name\":\"server\"}": {
+                                ".": {},
+                                "f:command": {},
+                                "f:image": {},
+                                "f:imagePullPolicy": {},
+                                "f:name": {},
+                                "f:resources": {},
+                                "f:terminationMessagePath": {},
+                                "f:terminationMessagePolicy": {}
+                            }
+                        },
+                        "f:dnsPolicy": {},
+                        "f:enableServiceLinks": {},
+                        "f:restartPolicy": {},
+                        "f:schedulerName": {},
+                        "f:securityContext": {},
+                        "f:terminationGracePeriodSeconds": {}
+                    }
+                },
+                "manager": "kube-controller-manager",
+                "operation": "Update",
+                "time": "2020-04-08T10:22:23Z"
+            },
+            {
+                "apiVersion": "v1",
+                "fieldsType": "FieldsV1",
+                "fieldsV1": {
+                    "f:status": {
+                        "f:conditions": {
+                            "k:{\"type\":\"ContainersReady\"}": {
+                                ".": {},
+                                "f:lastProbeTime": {},
+                                "f:lastTransitionTime": {},
+                                "f:status": {},
+                                "f:type": {}
+                            },
+                            "k:{\"type\":\"Initialized\"}": {
+                                ".": {},
+                                "f:lastProbeTime": {},
+                                "f:lastTransitionTime": {},
+                                "f:status": {},
+                                "f:type": {}
+                            },
+                            "k:{\"type\":\"Ready\"}": {
+                                ".": {},
+                                "f:lastProbeTime": {},
+                                "f:lastTransitionTime": {},
+                                "f:status": {},
+                                "f:type": {}
+                            }
+                        },
+                        "f:containerStatuses": {},
+                        "f:hostIP": {},
+                        "f:phase": {},
+                        "f:podIP": {},
+                        "f:podIPs": {
+                            ".": {},
+                            "k:{\"ip\":\"10.128.0.35\"}": {
+                                ".": {},
+                                "f:ip": {}
+                            }
+                        },
+                        "f:startTime": {}
+                    }
+                },
+                "manager": "kubelet",
+                "operation": "Update",
+                "time": "2020-04-08T10:22:58Z"
+            }
+        ],
+        "name": "front-a-1-cdbc49684-ssx8c",
+        "namespace": "apps2",
+        "ownerReferences": [
+            {
+                "apiVersion": "apps/v1",
+                "blockOwnerDeletion": true,
+                "controller": true,
+                "kind": "ReplicaSet",
+                "name": "front-a-1-cdbc49684",
+                "uid": "d5518a2c-9844-450b-a333-b9ced431f8a5"
+            }
+        ],
+        "resourceVersion": "279348",
+        "selfLink": "/api/v1/namespaces/apps2/pods/front-a-1-cdbc49684-ssx8c",
+        "uid": "5cc0f3cf-67ad-4d18-bf61-029b3adbc0ba"
+    },
+    "spec": {
+        "containers": [
+            {
+                "command": [
+                    "sleep",
+                    "300000d"
+                ],
+                "image": "docker.io/library/busybox:1.28.4",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "server",
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                        "name": "default-token-5kftb",
+                        "readOnly": true
+                    }
+                ]
+            }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "enableServiceLinks": true,
+        "nodeName": "k8s1",
+        "priority": 0,
+        "restartPolicy": "Always",
+        "schedulerName": "default-scheduler",
+        "securityContext": {},
+        "serviceAccount": "default",
+        "serviceAccountName": "default",
+        "terminationGracePeriodSeconds": 30,
+        "tolerations": [
+            {
+                "effect": "NoExecute",
+                "key": "node.kubernetes.io/not-ready",
+                "operator": "Exists",
+                "tolerationSeconds": 300
+            },
+            {
+                "effect": "NoExecute",
+                "key": "node.kubernetes.io/unreachable",
+                "operator": "Exists",
+                "tolerationSeconds": 300
+            }
+        ],
+        "volumes": [
+            {
+                "name": "default-token-5kftb",
+                "secret": {
+                    "defaultMode": 420,
+                    "secretName": "default-token-5kftb"
+                }
+            }
+        ]
+    },
+    "status": {
+        "conditions": [
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2020-04-08T10:22:23Z",
+                "status": "True",
+                "type": "Initialized"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2020-04-08T10:22:56Z",
+                "status": "True",
+                "type": "Ready"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2020-04-08T10:22:56Z",
+                "status": "True",
+                "type": "ContainersReady"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2020-04-08T10:22:23Z",
+                "status": "True",
+                "type": "PodScheduled"
+            }
+        ],
+        "containerStatuses": [
+            {
+                "containerID": "docker://adac48d72e66ee60d20fe6f8cd3e35fca443488c02ef543b3e0cc822fe2b5f2c",
+                "image": "busybox:1.28.4",
+                "imageID": "docker-pullable://busybox@sha256:141c253bc4c3fd0a201d32dc1f493bcf3fff003b6df416dea4f41046e0f37d47",
+                "lastState": {},
+                "name": "server",
+                "ready": true,
+                "restartCount": 0,
+                "started": true,
+                "state": {
+                    "running": {
+                        "startedAt": "2020-04-08T10:22:48Z"
+                    }
+                }
+            }
+        ],
+        "hostIP": "192.168.33.11",
+        "phase": "Running",
+        "podIP": "10.128.0.35",
+        "podIPs": [
+            {
+                "ip": "10.128.0.35"
+            }
+        ],
+        "qosClass": "BestEffort",
+        "startTime": "2020-04-08T10:22:23Z"
+    }
+}

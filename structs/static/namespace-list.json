@@ -1,0 +1,142 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "Namespace",
+            "metadata": {
+                "creationTimestamp": "2020-11-06T09:37:43Z",
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:status": {
+                                "f:phase": {}
+                            }
+                        },
+                        "manager": "kube-apiserver",
+                        "operation": "Update",
+                        "time": "2020-11-06T09:37:43Z"
+                    }
+                ],
+                "name": "default",
+                "resourceVersion": "152",
+                "selfLink": "/api/v1/namespaces/default",
+                "uid": "32fe099a-3170-4466-b5b0-669b4c379ad2"
+            },
+            "spec": {
+                "finalizers": [
+                    "kubernetes"
+                ]
+            },
+            "status": {
+                "phase": "Active"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Namespace",
+            "metadata": {
+                "creationTimestamp": "2020-11-06T09:37:41Z",
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:status": {
+                                "f:phase": {}
+                            }
+                        },
+                        "manager": "kube-apiserver",
+                        "operation": "Update",
+                        "time": "2020-11-06T09:37:41Z"
+                    }
+                ],
+                "name": "kube-node-lease",
+                "resourceVersion": "6",
+                "selfLink": "/api/v1/namespaces/kube-node-lease",
+                "uid": "0c9e083c-6b61-4b17-a187-7beb852f18ad"
+            },
+            "spec": {
+                "finalizers": [
+                    "kubernetes"
+                ]
+            },
+            "status": {
+                "phase": "Active"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Namespace",
+            "metadata": {
+                "creationTimestamp": "2020-11-06T09:37:41Z",
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:status": {
+                                "f:phase": {}
+                            }
+                        },
+                        "manager": "kube-apiserver",
+                        "operation": "Update",
+                        "time": "2020-11-06T09:37:41Z"
+                    }
+                ],
+                "name": "kube-public",
+                "resourceVersion": "5",
+                "selfLink": "/api/v1/namespaces/kube-public",
+                "uid": "5ba01b34-1224-4f4a-92db-09aaf72041d2"
+            },
+            "spec": {
+                "finalizers": [
+                    "kubernetes"
+                ]
+            },
+            "status": {
+                "phase": "Active"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Namespace",
+            "metadata": {
+                "creationTimestamp": "2020-11-06T09:37:41Z",
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:status": {
+                                "f:phase": {}
+                            }
+                        },
+                        "manager": "kube-apiserver",
+                        "operation": "Update",
+                        "time": "2020-11-06T09:37:41Z"
+                    }
+                ],
+                "name": "kube-system",
+                "resourceVersion": "4",
+                "selfLink": "/api/v1/namespaces/kube-system",
+                "uid": "0a57ca11-ba67-4df5-828c-2b8393f3c689"
+            },
+            "spec": {
+                "finalizers": [
+                    "kubernetes"
+                ]
+            },
+            "status": {
+                "phase": "Active"
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": "",
+        "selfLink": ""
+    }
+}

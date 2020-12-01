@@ -1,0 +1,67 @@
+{
+    "apiVersion": "cilium.io/v2",
+    "kind": "CiliumNode",
+    "metadata": {
+        "creationTimestamp": "2020-10-21T16:47:39Z",
+        "generation": 93,
+        "labels": {
+            "beta.kubernetes.io/arch": "amd64",
+            "beta.kubernetes.io/os": "linux",
+            "kubernetes.io/arch": "amd64",
+            "kubernetes.io/hostname": "k8s1",
+            "kubernetes.io/os": "linux"
+        },
+        "name": "k8s1",
+        "ownerReferences": [
+            {
+                "apiVersion": "v1",
+                "kind": "Node",
+                "name": "k8s1",
+                "uid": "17a5bd06-13b1-11eb-aeea-080027a2ef80"
+            }
+        ],
+        "resourceVersion": "94630",
+        "selfLink": "/apis/cilium.io/v2/ciliumnodes/k8s1",
+        "uid": "211b75eb-13bd-11eb-aeea-080027a2ef80"
+    },
+    "spec": {
+        "addresses": [
+            {
+                "ip": "192.168.33.11",
+                "type": "InternalIP"
+            },
+            {
+                "ip": "10.11.0.6",
+                "type": "CiliumInternalIP"
+            },
+            {
+                "ip": "fd00::54f0",
+                "type": "CiliumInternalIP"
+            },
+            {
+                "ip": "fd00::b",
+                "type": "InternalIP"
+            }
+        ],
+        "azure": {},
+        "encryption": {},
+        "eni": {},
+        "health": {
+            "ipv4": "10.11.0.146",
+            "ipv6": "fd00::7e3f"
+        },
+        "ipam": {
+            "podCIDRs": [
+                "10.11.0.0/24",
+                "fd00::/112"
+            ]
+        }
+    },
+    "status": {
+        "azure": {},
+        "eni": {},
+        "ipam": {
+            "operator-status": {}
+        }
+    }
+}

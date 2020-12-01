@@ -1,0 +1,100 @@
+{
+    "apiVersion": "cilium.io/v2",
+    "kind": "CiliumClusterwideNetworkPolicy",
+    "metadata": {
+        "annotations": {
+            "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"cilium.io/v2\",\"kind\":\"CiliumClusterwideNetworkPolicy\",\"metadata\":{\"annotations\":{},\"name\":\"fancyrule\"},\"specs\":[{\"endpointSelector\":{\"matchLabels\":{\"app\":\"service\"}},\"ingress\":[{\"fromEndpoints\":[{\"matchLabels\":{\"env\":\"prod\"}}],\"toPorts\":[{\"ports\":[{\"port\":\"80\",\"protocol\":\"TCP\"}],\"rules\":{\"http\":[{\"method\":\"GET\",\"path\":\"/public\"}]}}]}]},{\"egress\":[{\"toPorts\":[{\"ports\":[{\"port\":\"80\",\"protocol\":\"TCP\"}],\"rules\":{\"http\":[{\"host\":\"^external-service.org$\",\"method\":\"POST\"}]}}]}],\"endpointSelector\":{\"matchLabels\":{\"env\":\"prod\"}}}]}\n"
+        },
+        "creationTimestamp": "2020-04-07T20:44:09Z",
+        "generation": 1,
+        "managedFields": [
+            {
+                "apiVersion": "cilium.io/v2",
+                "fieldsType": "FieldsV1",
+                "fieldsV1": {
+                    "f:metadata": {
+                        "f:annotations": {
+                            ".": {},
+                            "f:kubectl.kubernetes.io/last-applied-configuration": {}
+                        }
+                    },
+                    "f:specs": {}
+                },
+                "manager": "kubectl",
+                "operation": "Update",
+                "time": "2020-04-07T20:44:09Z"
+            }
+        ],
+        "name": "fancyrule",
+        "resourceVersion": "244198",
+        "selfLink": "/apis/cilium.io/v2/ciliumclusterwidenetworkpolicies/fancyrule",
+        "uid": "a4d940df-d237-45d2-b7e7-1f7c28887b01"
+    },
+    "specs": [
+        {
+            "endpointSelector": {
+                "matchLabels": {
+                    "app": "service"
+                }
+            },
+            "ingress": [
+                {
+                    "fromEndpoints": [
+                        {
+                            "matchLabels": {
+                                "env": "prod"
+                            }
+                        }
+                    ],
+                    "toPorts": [
+                        {
+                            "ports": [
+                                {
+                                    "port": "80",
+                                    "protocol": "TCP"
+                                }
+                            ],
+                            "rules": {
+                                "http": [
+                                    {
+                                        "method": "GET",
+                                        "path": "/public"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "egress": [
+                {
+                    "toPorts": [
+                        {
+                            "ports": [
+                                {
+                                    "port": "80",
+                                    "protocol": "TCP"
+                                }
+                            ],
+                            "rules": {
+                                "http": [
+                                    {
+                                        "host": "^external-service.org$",
+                                        "method": "POST"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ],
+            "endpointSelector": {
+                "matchLabels": {
+                    "env": "prod"
+                }
+            }
+        }
+    ]
+}

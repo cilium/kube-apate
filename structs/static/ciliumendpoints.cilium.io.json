@@ -1,0 +1,51 @@
+{
+    "apiVersion": "cilium.io/v2",
+    "kind": "CiliumEndpoint",
+    "metadata": {
+        "creationTimestamp": "2020-04-08T10:22:30Z",
+        "generation": 1,
+        "name": "front-a-11-c9685585f-w2vhc",
+        "namespace": "apps2",
+        "resourceVersion": "279169",
+        "selfLink": "/apis/cilium.io/v2/namespaces/apps2/ciliumendpoints/front-a-11-c9685585f-w2vhc",
+        "uid": "fb839255-9308-4f67-acbd-c98154ba1901"
+    },
+    "status": {
+        "encryption": {},
+        "external-identifiers": {
+            "container-id": "a78a3eb3c84686b88e3dc65605fa2bff919f6aad3ca5af54128dfe7d9d7b68eb",
+            "k8s-namespace": "apps2",
+            "k8s-pod-name": "front-a-11-c9685585f-w2vhc",
+            "pod-name": "apps2/front-a-11-c9685585f-w2vhc"
+        },
+        "id": 3372,
+        "identity": {
+            "id": 65011,
+            "labels": [
+                "k8s:app=front-a-11",
+                "k8s:io.cilium.k8s.policy.cluster=default",
+                "k8s:io.cilium.k8s.policy.serviceaccount=default",
+                "k8s:io.kubernetes.pod.namespace=apps2",
+                "k8s:random-label-10=thequickbrownfoxjumpsoverthelazydog-10",
+                "k8s:random-label-1=thequickbrownfoxjumpsoverthelazydog-1",
+                "k8s:random-label-2=thequickbrownfoxjumpsoverthelazydog-2",
+                "k8s:random-label-3=thequickbrownfoxjumpsoverthelazydog-3",
+                "k8s:random-label-4=thequickbrownfoxjumpsoverthelazydog-4",
+                "k8s:random-label-5=thequickbrownfoxjumpsoverthelazydog-5",
+                "k8s:random-label-6=thequickbrownfoxjumpsoverthelazydog-6",
+                "k8s:random-label-7=thequickbrownfoxjumpsoverthelazydog-7",
+                "k8s:random-label-8=thequickbrownfoxjumpsoverthelazydog-8",
+                "k8s:random-label-9=thequickbrownfoxjumpsoverthelazydog-9"
+            ]
+        },
+        "networking": {
+            "addressing": [
+                {
+                    "ipv4": "10.128.0.55"
+                }
+            ],
+            "node": "192.168.34.11"
+        },
+        "state": "ready"
+    }
+}
