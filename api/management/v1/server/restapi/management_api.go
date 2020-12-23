@@ -50,6 +50,9 @@ func NewManagementAPI(spec *loads.Document) *ManagementAPI {
 		CiliumPostManagementCiliumIoV2CiliumEndpointsHandler: cilium.PostManagementCiliumIoV2CiliumEndpointsHandlerFunc(func(params cilium.PostManagementCiliumIoV2CiliumEndpointsParams) middleware.Responder {
 			return middleware.NotImplemented("operation cilium.PostManagementCiliumIoV2CiliumEndpoints has not yet been implemented")
 		}),
+		CiliumPostManagementCiliumIoV2CiliumNodesHandler: cilium.PostManagementCiliumIoV2CiliumNodesHandlerFunc(func(params cilium.PostManagementCiliumIoV2CiliumNodesParams) middleware.Responder {
+			return middleware.NotImplemented("operation cilium.PostManagementCiliumIoV2CiliumNodes has not yet been implemented")
+		}),
 	}
 }
 
@@ -86,6 +89,8 @@ type ManagementAPI struct {
 
 	// CiliumPostManagementCiliumIoV2CiliumEndpointsHandler sets the operation handler for the post management cilium io v2 cilium endpoints operation
 	CiliumPostManagementCiliumIoV2CiliumEndpointsHandler cilium.PostManagementCiliumIoV2CiliumEndpointsHandler
+	// CiliumPostManagementCiliumIoV2CiliumNodesHandler sets the operation handler for the post management cilium io v2 cilium nodes operation
+	CiliumPostManagementCiliumIoV2CiliumNodesHandler cilium.PostManagementCiliumIoV2CiliumNodesHandler
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
 	ServeError func(http.ResponseWriter, *http.Request, error)
@@ -164,6 +169,9 @@ func (o *ManagementAPI) Validate() error {
 
 	if o.CiliumPostManagementCiliumIoV2CiliumEndpointsHandler == nil {
 		unregistered = append(unregistered, "cilium.PostManagementCiliumIoV2CiliumEndpointsHandler")
+	}
+	if o.CiliumPostManagementCiliumIoV2CiliumNodesHandler == nil {
+		unregistered = append(unregistered, "cilium.PostManagementCiliumIoV2CiliumNodesHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -257,6 +265,10 @@ func (o *ManagementAPI) initHandlerCache() {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
 	o.handlers["POST"]["/management/cilium.io/v2/ciliumendpoints"] = cilium.NewPostManagementCiliumIoV2CiliumEndpoints(o.context, o.CiliumPostManagementCiliumIoV2CiliumEndpointsHandler)
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/management/cilium.io/v2/ciliumnodes"] = cilium.NewPostManagementCiliumIoV2CiliumNodes(o.context, o.CiliumPostManagementCiliumIoV2CiliumNodesHandler)
 }
 
 // Serve creates a http handler to serve the API over HTTP

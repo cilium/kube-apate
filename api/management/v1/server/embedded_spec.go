@@ -56,6 +56,30 @@ func init() {
           }
         }
       }
+    },
+    "/management/cilium.io/v2/ciliumnodes": {
+      "post": {
+        "schemes": [
+          "http"
+        ],
+        "tags": [
+          "cilium"
+        ],
+        "operationId": "PostManagementCiliumIoV2CiliumNodes",
+        "parameters": [
+          {
+            "$ref": "#/parameters/options"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "202": {
+            "description": "Accepted"
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -112,6 +136,35 @@ func init() {
           "cilium"
         ],
         "operationId": "PostManagementCiliumIoV2CiliumEndpoints",
+        "parameters": [
+          {
+            "description": "Options to modify structures",
+            "name": "options",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/options"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "202": {
+            "description": "Accepted"
+          }
+        }
+      }
+    },
+    "/management/cilium.io/v2/ciliumnodes": {
+      "post": {
+        "schemes": [
+          "http"
+        ],
+        "tags": [
+          "cilium"
+        ],
+        "operationId": "PostManagementCiliumIoV2CiliumNodes",
         "parameters": [
           {
             "description": "Options to modify structures",

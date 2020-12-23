@@ -91,9 +91,9 @@ func initializeManagementAPI() *managementRestAPI.ManagementAPI {
 	// restAPI.CiliumListApisCiliumIoV2CiliumNetworkPolicyHandler =
 	// 	internalCiliumV2.NewReadCiliumNetworkPolicy()
 	//
-	// // GET /apis/cilium.io/v2/ciliumnodes
-	// restAPI.CiliumPostManagementCiliumIoV2CiliumNodesHandler =
-	// 	internalCiliumV2.NewListCiliumNode()
+	// POST /management/cilium.io/v2/ciliumnodes
+	restAPI.CiliumPostManagementCiliumIoV2CiliumNodesHandler =
+		internalCiliumV2.NewCiliumNodesMgr()
 
 	// POST /management/cilium.io/v2/ciliumendpoints
 	restAPI.CiliumPostManagementCiliumIoV2CiliumEndpointsHandler =

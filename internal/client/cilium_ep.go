@@ -14,3 +14,10 @@ func (c *Client) CiliumEndpointsAdd(opts *models.Options) error {
 	_, _, err := c.Cilium.PostManagementCiliumIoV2CiliumEndpoints(params)
 	return err
 }
+
+func (c *Client) CiliumNodesAdd(opts *models.Options) error {
+	params := cilium.NewPostManagementCiliumIoV2CiliumNodesParams().WithOptions(opts).WithTimeout(ClientTimeout)
+
+	_, _, err := c.Cilium.PostManagementCiliumIoV2CiliumNodes(params)
+	return err
+}

@@ -11,6 +11,7 @@ import (
 	"sync"
 
 	"github.com/cilium/kube-apate/api/k8s/v1/server/restapi/cilium"
+	management "github.com/cilium/kube-apate/api/management/v1/server/restapi/cilium"
 	"github.com/cilium/kube-apate/internal/encoders"
 	"github.com/cilium/kube-apate/internal/generators"
 	"github.com/cilium/kube-apate/utils"
@@ -27,7 +28,11 @@ const (
 	CN = "ciliumnodes.cilium.io"
 )
 
-var CiliumNodeManager = &CiliumNodeMgr{}
+var CiliumNodeManager = &CiliumNodeMgr{
+	staticList:   &ciliumV2.CiliumNodeList{},
+	elemTemplate: &ciliumV2.CiliumNode{},
+	streamCh:     make(chan k8sRuntime.Object),
+}
 
 type CiliumNodeConfig struct {
 	Name           string
@@ -42,7 +47,9 @@ type CiliumNodeConfig struct {
 }
 
 type CiliumNodeMgr struct {
+	logger
 	sync.RWMutex
+	streamCh     chan k8sRuntime.Object
 	totalGenElem int64
 	staticList   *ciliumV2.CiliumNodeList
 	elemTemplate *ciliumV2.CiliumNode
@@ -147,20 +154,43 @@ func (n *CiliumNodeMgr) List(start, limit int64) (k8sRuntime.Object, error) {
 	maxElemts := utils.Min(totalElems, limit)
 	cnList.Continue = utils.Cont(start, totalElems, limit)
 
-	nCfg := &CiliumNodeConfig{}
-	for i := start; i < maxElemts; i++ {
-		nCfg.Name = generators.CNName(i)
-		nCfg.UUID = generators.CNUUID(i)
-		nCfg.PodUUID = generators.PodUUID(i)
-		nCfg.IPv4, nCfg.IPv6 = generators.GetHostIP(i)
-		nCfg.PodCIDRv4, nCfg.PodCIDRv6 = generators.GetPodCIDR(i)
-		nCfg.CiliumHostIP = generators.IPFromCIDR(nCfg.PodCIDRv4, 125)
-		nCfg.CiliumHealthIP = generators.IPFromCIDR(nCfg.PodCIDRv4, 126)
-		ns := n.getItem(nCfg)
-		cnList.Items = append(cnList.Items, *ns)
+	genCN := n.GenObjs(start, maxElemts)
+	for obj := range genCN {
+		cn := obj.(*ciliumV2.CiliumNode)
+		cnList.Items = append(cnList.Items, *cn)
 	}
 
 	return cnList, nil
+}
+
+func (n *CiliumNodeMgr) GenObjs(start, maxElemts int64) <-chan k8sRuntime.Object {
+	ch := make(chan k8sRuntime.Object)
+	go func() {
+		for i := start; i < maxElemts; i++ {
+			ch <- n.GenObj(i)
+		}
+		close(ch)
+	}()
+	return ch
+}
+
+func (n *CiliumNodeMgr) GenObj(idx int64) k8sRuntime.Object {
+	nCfg := &CiliumNodeConfig{}
+	nCfg.Name = generators.CNName(idx)
+	nCfg.UUID = generators.CNUUID(idx)
+	nCfg.PodUUID = generators.PodUUID(idx)
+	nCfg.IPv4, nCfg.IPv6 = generators.GetHostIP(idx)
+	nCfg.PodCIDRv4, nCfg.PodCIDRv6 = generators.GetPodCIDR(idx)
+	nCfg.CiliumHostIP = generators.IPFromCIDR(nCfg.PodCIDRv4, 125)
+	nCfg.CiliumHealthIP = generators.IPFromCIDR(nCfg.PodCIDRv4, 126)
+	return n.getItem(nCfg)
+}
+
+func (n *CiliumNodeMgr) Stream() chan k8sRuntime.Object {
+	n.RWMutex.RLock()
+	streamer := n.streamCh
+	n.RWMutex.RUnlock()
+	return streamer
 }
 
 func (*CiliumNodeMgr) read(r io.ReadCloser) (k8sRuntime.Object, error) {
@@ -264,7 +294,7 @@ func (lcn *listCiliumNode) Handle(params cilium.ListApisCiliumIoV2CiliumNodesPar
 		"Params": params.HTTPRequest.URL.RawQuery,
 	}).Debug("request received")
 
-	return encoders.WatchOrListResponder(
+	return encoders.WatchOrListResponderWithEvents(
 		lcn,
 		&encoders.WatchOrListResponderCfg{
 			Watch:          params.Watch,
@@ -273,5 +303,30 @@ func (lcn *listCiliumNode) Handle(params cilium.ListApisCiliumIoV2CiliumNodesPar
 			Cont:           params.Continue,
 		},
 		getResponder,
+		ciliumEncoder,
 	)
+}
+
+type manageCiliumNodes struct {
+	*CiliumNodeMgr
+}
+
+func NewCiliumNodesMgr() management.PostManagementCiliumIoV2CiliumNodesHandler {
+	return &manageCiliumNodes{
+		CiliumNodeMgr: CiliumNodeManager,
+	}
+}
+
+func (lcn *manageCiliumNodes) Handle(params management.PostManagementCiliumIoV2CiliumNodesParams) middleware.Responder {
+	log.WithFields(logrus.Fields{
+		"Method": "POST",
+		"URL":    "/management/cilium.io/v2/ciliumnodes",
+		"Params": params.HTTPRequest.URL.RawQuery,
+	}).Debug("request received")
+
+	totalCNs := int64(params.Options.Add) - int64(params.Options.Del)
+
+	encoders.GenerateK8sEvents(lcn, totalCNs)
+
+	return management.NewPostManagementCiliumIoV2CiliumNodesAccepted()
 }
