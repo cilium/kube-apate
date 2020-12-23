@@ -36,6 +36,20 @@ paths:
       parameters:
         - "$ref": "#/parameters/options"
       operationId: "PostManagementCiliumIoV2CiliumNodes"
+  "/management/cilium.io/v2/ciliumidentities":
+    post:
+      responses:
+        '200':
+          description: OK
+        '202':
+          description: Accepted
+      schemes:
+      - http
+      tags:
+      - cilium
+      parameters:
+        - "$ref": "#/parameters/options"
+      operationId: "PostManagementCiliumIoV2CiliumIdentities"
 definitions:
   add:
     description: add N random new Objects

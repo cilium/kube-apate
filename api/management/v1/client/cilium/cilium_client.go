@@ -32,6 +32,8 @@ type Client struct {
 type ClientService interface {
 	PostManagementCiliumIoV2CiliumEndpoints(params *PostManagementCiliumIoV2CiliumEndpointsParams) (*PostManagementCiliumIoV2CiliumEndpointsOK, *PostManagementCiliumIoV2CiliumEndpointsAccepted, error)
 
+	PostManagementCiliumIoV2CiliumIdentities(params *PostManagementCiliumIoV2CiliumIdentitiesParams) (*PostManagementCiliumIoV2CiliumIdentitiesOK, *PostManagementCiliumIoV2CiliumIdentitiesAccepted, error)
+
 	PostManagementCiliumIoV2CiliumNodes(params *PostManagementCiliumIoV2CiliumNodesParams) (*PostManagementCiliumIoV2CiliumNodesOK, *PostManagementCiliumIoV2CiliumNodesAccepted, error)
 
 	SetTransport(transport runtime.ClientTransport)
@@ -65,6 +67,41 @@ func (a *Client) PostManagementCiliumIoV2CiliumEndpoints(params *PostManagementC
 	case *PostManagementCiliumIoV2CiliumEndpointsOK:
 		return value, nil, nil
 	case *PostManagementCiliumIoV2CiliumEndpointsAccepted:
+		return nil, value, nil
+	}
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for cilium: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  PostManagementCiliumIoV2CiliumIdentities post management cilium io v2 cilium identities API
+*/
+func (a *Client) PostManagementCiliumIoV2CiliumIdentities(params *PostManagementCiliumIoV2CiliumIdentitiesParams) (*PostManagementCiliumIoV2CiliumIdentitiesOK, *PostManagementCiliumIoV2CiliumIdentitiesAccepted, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewPostManagementCiliumIoV2CiliumIdentitiesParams()
+	}
+
+	result, err := a.transport.Submit(&runtime.ClientOperation{
+		ID:                 "PostManagementCiliumIoV2CiliumIdentities",
+		Method:             "POST",
+		PathPattern:        "/management/cilium.io/v2/ciliumidentities",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &PostManagementCiliumIoV2CiliumIdentitiesReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+	switch value := result.(type) {
+	case *PostManagementCiliumIoV2CiliumIdentitiesOK:
+		return value, nil, nil
+	case *PostManagementCiliumIoV2CiliumIdentitiesAccepted:
 		return nil, value, nil
 	}
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue

@@ -8,6 +8,7 @@ import (
 	"sync"
 
 	"github.com/cilium/kube-apate/api/k8s/v1/server/restapi/cilium"
+	management "github.com/cilium/kube-apate/api/management/v1/server/restapi/cilium"
 	"github.com/cilium/kube-apate/internal/encoders"
 	"github.com/cilium/kube-apate/internal/generators"
 	"github.com/cilium/kube-apate/utils"
@@ -38,6 +39,7 @@ type CIConfig struct {
 }
 
 type CIMgr struct {
+	logger
 	sync.RWMutex
 	streamCh     chan k8sRuntime.Object
 	totalGenElem int64
@@ -97,45 +99,50 @@ func (n *CIMgr) getItem(cfg *CIConfig) *ciliumV2.CiliumIdentity {
 
 func (n *CIMgr) List(start, limit int64) (k8sRuntime.Object, error) {
 	n.RLock()
-	ceList := n.staticList.DeepCopy()
+	ciList := n.staticList.DeepCopy()
 	totalElems := n.totalGenElem
 	n.RUnlock()
 
 	if start == 0 {
-		totalElems += int64(len(ceList.Items))
+		totalElems += int64(len(ciList.Items))
 		// we are going to send the static elements so no need to generate
 		// elements from [0, start]
 		start = totalElems
 	} else {
-		ceList.Items = nil
+		ciList.Items = nil
 	}
 
 	maxElemts := utils.Min(totalElems, limit)
-	ceList.Continue = utils.Cont(start, totalElems, limit)
+	ciList.Continue = utils.Cont(start, totalElems, limit)
 
-	genCI := n.genCI(start, maxElemts)
-	for ce := range genCI {
-		ceList.Items = append(ceList.Items, *ce)
+	genCI := n.GenObjs(start, maxElemts)
+	for obj := range genCI {
+		ci := obj.(*ciliumV2.CiliumIdentity)
+		ciList.Items = append(ciList.Items, *ci)
 	}
 
-	return ceList, nil
+	return ciList, nil
 }
 
-func (n *CIMgr) genCI(start, maxElemts int64) <-chan *ciliumV2.CiliumIdentity {
-	ch := make(chan *ciliumV2.CiliumIdentity)
+func (n *CIMgr) GenObjs(start, maxElemts int64) <-chan k8sRuntime.Object {
+	ch := make(chan k8sRuntime.Object)
 	go func() {
-		ciCfg := &CIConfig{}
 		for i := start; i < maxElemts; i++ {
-			ciCfg.Name = generators.CIName(i)
-			ciCfg.UUID = generators.CIUUID(i)
-			ciCfg.Namespace = generators.NamespaceName(i)
-			ciCfg.Labels = generators.CiliumIdentityLabels(i)
-			ciCfg.SecurityLabels = generators.CiliumSecurityIdentityLabels(i)
-			ch <- n.getItem(ciCfg)
+			ch <- n.GenObj(i)
 		}
 		close(ch)
 	}()
 	return ch
+}
+
+func (n *CIMgr) GenObj(idx int64) k8sRuntime.Object {
+	ciCfg := &CIConfig{}
+	ciCfg.Name = generators.CIName(idx)
+	ciCfg.UUID = generators.CIUUID(idx)
+	ciCfg.Namespace = generators.NamespaceName(idx)
+	ciCfg.Labels = generators.CiliumIdentityLabels(idx)
+	ciCfg.SecurityLabels = generators.CiliumSecurityIdentityLabels(idx)
+	return n.getItem(ciCfg)
 }
 
 func (n *CIMgr) Stream() chan k8sRuntime.Object {
@@ -173,4 +180,28 @@ func (lci *listCiliumIdentity) Handle(params cilium.ListApisCiliumIoV2CiliumIden
 		getResponder,
 		ciliumEncoder,
 	)
+}
+
+type manageCiliumIdentities struct {
+	*CIMgr
+}
+
+func NewCiliumIdentitiesMgr() management.PostManagementCiliumIoV2CiliumIdentitiesHandler {
+	return &manageCiliumIdentities{
+		CIMgr: CIManager,
+	}
+}
+
+func (lCI *manageCiliumIdentities) Handle(params management.PostManagementCiliumIoV2CiliumIdentitiesParams) middleware.Responder {
+	log.WithFields(logrus.Fields{
+		"Method": "POST",
+		"URL":    "/management/cilium.io/v2/ciliumidentities",
+		"Params": params.HTTPRequest.URL.RawQuery,
+	}).Debug("request received")
+
+	totalCIPs := int64(params.Options.Add) - int64(params.Options.Del)
+
+	encoders.GenerateK8sEvents(lCI, totalCIPs)
+
+	return management.NewPostManagementCiliumIoV2CiliumIdentitiesAccepted()
 }

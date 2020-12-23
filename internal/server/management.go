@@ -99,9 +99,9 @@ func initializeManagementAPI() *managementRestAPI.ManagementAPI {
 	restAPI.CiliumPostManagementCiliumIoV2CiliumEndpointsHandler =
 		internalCiliumV2.NewCiliumEndpointsMgr()
 
-	// GET /apis/cilium.io/v2/ciliumidentities
-	// restAPI.CiliumListApisCiliumIoV2CiliumIdentityHandler =
-	// 	internalCiliumV2.NewReadCiliumIdentity()
+	// POST /management/cilium.io/v2/ciliumidentities
+	restAPI.CiliumPostManagementCiliumIoV2CiliumIdentitiesHandler =
+		internalCiliumV2.NewCiliumIdentitiesMgr()
 	//
 	// // DELETE /apis/cilium.io/v2/namespaces/{namespace}/ciliumendpoints/{name}
 	// restAPI.CiliumDeleteApisCiliumIoV2CiliumEndpointHandler =

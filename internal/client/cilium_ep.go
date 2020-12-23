@@ -21,3 +21,10 @@ func (c *Client) CiliumNodesAdd(opts *models.Options) error {
 	_, _, err := c.Cilium.PostManagementCiliumIoV2CiliumNodes(params)
 	return err
 }
+
+func (c *Client) CiliumIdentitiesAdd(opts *models.Options) error {
+	params := cilium.NewPostManagementCiliumIoV2CiliumIdentitiesParams().WithOptions(opts).WithTimeout(ClientTimeout)
+
+	_, _, err := c.Cilium.PostManagementCiliumIoV2CiliumIdentities(params)
+	return err
+}

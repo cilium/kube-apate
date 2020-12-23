@@ -50,6 +50,9 @@ func NewManagementAPI(spec *loads.Document) *ManagementAPI {
 		CiliumPostManagementCiliumIoV2CiliumEndpointsHandler: cilium.PostManagementCiliumIoV2CiliumEndpointsHandlerFunc(func(params cilium.PostManagementCiliumIoV2CiliumEndpointsParams) middleware.Responder {
 			return middleware.NotImplemented("operation cilium.PostManagementCiliumIoV2CiliumEndpoints has not yet been implemented")
 		}),
+		CiliumPostManagementCiliumIoV2CiliumIdentitiesHandler: cilium.PostManagementCiliumIoV2CiliumIdentitiesHandlerFunc(func(params cilium.PostManagementCiliumIoV2CiliumIdentitiesParams) middleware.Responder {
+			return middleware.NotImplemented("operation cilium.PostManagementCiliumIoV2CiliumIdentities has not yet been implemented")
+		}),
 		CiliumPostManagementCiliumIoV2CiliumNodesHandler: cilium.PostManagementCiliumIoV2CiliumNodesHandlerFunc(func(params cilium.PostManagementCiliumIoV2CiliumNodesParams) middleware.Responder {
 			return middleware.NotImplemented("operation cilium.PostManagementCiliumIoV2CiliumNodes has not yet been implemented")
 		}),
@@ -89,6 +92,8 @@ type ManagementAPI struct {
 
 	// CiliumPostManagementCiliumIoV2CiliumEndpointsHandler sets the operation handler for the post management cilium io v2 cilium endpoints operation
 	CiliumPostManagementCiliumIoV2CiliumEndpointsHandler cilium.PostManagementCiliumIoV2CiliumEndpointsHandler
+	// CiliumPostManagementCiliumIoV2CiliumIdentitiesHandler sets the operation handler for the post management cilium io v2 cilium identities operation
+	CiliumPostManagementCiliumIoV2CiliumIdentitiesHandler cilium.PostManagementCiliumIoV2CiliumIdentitiesHandler
 	// CiliumPostManagementCiliumIoV2CiliumNodesHandler sets the operation handler for the post management cilium io v2 cilium nodes operation
 	CiliumPostManagementCiliumIoV2CiliumNodesHandler cilium.PostManagementCiliumIoV2CiliumNodesHandler
 	// ServeError is called when an error is received, there is a default handler
@@ -169,6 +174,9 @@ func (o *ManagementAPI) Validate() error {
 
 	if o.CiliumPostManagementCiliumIoV2CiliumEndpointsHandler == nil {
 		unregistered = append(unregistered, "cilium.PostManagementCiliumIoV2CiliumEndpointsHandler")
+	}
+	if o.CiliumPostManagementCiliumIoV2CiliumIdentitiesHandler == nil {
+		unregistered = append(unregistered, "cilium.PostManagementCiliumIoV2CiliumIdentitiesHandler")
 	}
 	if o.CiliumPostManagementCiliumIoV2CiliumNodesHandler == nil {
 		unregistered = append(unregistered, "cilium.PostManagementCiliumIoV2CiliumNodesHandler")
@@ -265,6 +273,10 @@ func (o *ManagementAPI) initHandlerCache() {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
 	o.handlers["POST"]["/management/cilium.io/v2/ciliumendpoints"] = cilium.NewPostManagementCiliumIoV2CiliumEndpoints(o.context, o.CiliumPostManagementCiliumIoV2CiliumEndpointsHandler)
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/management/cilium.io/v2/ciliumidentities"] = cilium.NewPostManagementCiliumIoV2CiliumIdentities(o.context, o.CiliumPostManagementCiliumIoV2CiliumIdentitiesHandler)
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
