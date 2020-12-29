@@ -36,6 +36,8 @@ type ClientService interface {
 
 	PostManagementCiliumIoV2CiliumNodes(params *PostManagementCiliumIoV2CiliumNodesParams) (*PostManagementCiliumIoV2CiliumNodesOK, *PostManagementCiliumIoV2CiliumNodesAccepted, error)
 
+	PostManagementKubernetesIoV1Pods(params *PostManagementKubernetesIoV1PodsParams) (*PostManagementKubernetesIoV1PodsOK, *PostManagementKubernetesIoV1PodsAccepted, error)
+
 	SetTransport(transport runtime.ClientTransport)
 }
 
@@ -137,6 +139,41 @@ func (a *Client) PostManagementCiliumIoV2CiliumNodes(params *PostManagementCiliu
 	case *PostManagementCiliumIoV2CiliumNodesOK:
 		return value, nil, nil
 	case *PostManagementCiliumIoV2CiliumNodesAccepted:
+		return nil, value, nil
+	}
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for cilium: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  PostManagementKubernetesIoV1Pods post management kubernetes io v1 pods API
+*/
+func (a *Client) PostManagementKubernetesIoV1Pods(params *PostManagementKubernetesIoV1PodsParams) (*PostManagementKubernetesIoV1PodsOK, *PostManagementKubernetesIoV1PodsAccepted, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewPostManagementKubernetesIoV1PodsParams()
+	}
+
+	result, err := a.transport.Submit(&runtime.ClientOperation{
+		ID:                 "PostManagementKubernetesIoV1Pods",
+		Method:             "POST",
+		PathPattern:        "/management/kubernetes.io/v1/pods",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &PostManagementKubernetesIoV1PodsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+	switch value := result.(type) {
+	case *PostManagementKubernetesIoV1PodsOK:
+		return value, nil, nil
+	case *PostManagementKubernetesIoV1PodsAccepted:
 		return nil, value, nil
 	}
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue

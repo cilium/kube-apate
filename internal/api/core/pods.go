@@ -8,6 +8,7 @@ import (
 	"sync"
 
 	"github.com/cilium/kube-apate/api/k8s/v1/server/restapi/core_v1"
+	management "github.com/cilium/kube-apate/api/management/v1/server/restapi/cilium"
 	"github.com/cilium/kube-apate/internal/encoders"
 	"github.com/cilium/kube-apate/internal/generators"
 	"github.com/cilium/kube-apate/utils"
@@ -40,7 +41,11 @@ func PodLabels(idx int64) map[string]string {
 	}
 }
 
-var PodManager = &PodMgr{}
+var PodManager = &PodMgr{
+	staticList:   &k8sCoreV1.PodList{},
+	elemTemplate: &k8sCoreV1.Pod{},
+	streamCh:     make(chan k8sRuntime.Object),
+}
 
 type PodConfig struct {
 	Name     string
@@ -53,7 +58,9 @@ type PodConfig struct {
 }
 
 type PodMgr struct {
+	logger
 	sync.RWMutex
+	streamCh     chan k8sRuntime.Object
 	totalGenElem int64
 	staticList   *k8sCoreV1.PodList
 	elemTemplate *k8sCoreV1.Pod
@@ -129,31 +136,54 @@ func (p *PodMgr) List(start, limit int64) (k8sRuntime.Object, error) {
 	maxElemts := utils.Min(totalElems, limit)
 	podList.Continue = utils.Cont(start, totalElems, limit)
 
-	pCfg := &PodConfig{}
-	for i := start; i < maxElemts; i++ {
-		podIPv4, podIPv6 := generators.GetPodIP(i)
-		if generators.IsBlockListedPod(podIPv4) {
-			continue
-		}
-		pCfg.Name = generators.PodName(i)
-		pCfg.PodIP = podIPv4
-		pCfg.PodIPs = []k8sCoreV1.PodIP{
-			{
-				IP: podIPv4,
-			},
-			{
-				IP: podIPv6,
-			},
-		}
-		pCfg.HostIP = generators.GetHostOfPodIPv4(podIPv4)
-		pCfg.NodeName = generators.NodeName(i)
-		pCfg.UUID = generators.PodUUID(i)
-		pCfg.Idx = i
-		pCpy := p.getItem(pCfg)
-		podList.Items = append(podList.Items, *pCpy)
+	genPods := p.GenObjs(start, maxElemts)
+	for obj := range genPods {
+		pod := obj.(*k8sCoreV1.Pod)
+		podList.Items = append(podList.Items, *pod)
 	}
 
 	return podList, nil
+}
+
+func (p *PodMgr) GenObjs(start, maxElemts int64) <-chan k8sRuntime.Object {
+	ch := make(chan k8sRuntime.Object)
+	go func() {
+		for i := start; i < maxElemts; i++ {
+			ch <- p.GenObj(i)
+		}
+		close(ch)
+	}()
+	return ch
+}
+
+func (p *PodMgr) GenObj(idx int64) k8sRuntime.Object {
+	pCfg := &PodConfig{}
+	podIPv4, podIPv6 := generators.GetPodIP(idx)
+	if generators.IsBlockListedPod(podIPv4) {
+		return nil
+	}
+	pCfg.Name = generators.PodName(idx)
+	pCfg.PodIP = podIPv4
+	pCfg.PodIPs = []k8sCoreV1.PodIP{
+		{
+			IP: podIPv4,
+		},
+		{
+			IP: podIPv6,
+		},
+	}
+	pCfg.HostIP = generators.GetHostOfPodIPv4(podIPv4)
+	pCfg.NodeName = generators.NodeName(idx)
+	pCfg.UUID = generators.PodUUID(idx)
+	pCfg.Idx = idx
+	return p.getItem(pCfg)
+}
+
+func (p *PodMgr) Stream() chan k8sRuntime.Object {
+	p.RWMutex.RLock()
+	streamer := p.streamCh
+	p.RWMutex.RUnlock()
+	return streamer
 }
 
 type listAllPods struct {
@@ -173,7 +203,7 @@ func (lap *listAllPods) Handle(params core_v1.ListCoreV1PodForAllNamespacesParam
 		"Params": params.HTTPRequest.URL.RawQuery,
 	}).Debug("request received")
 
-	return encoders.WatchOrListResponder(
+	return encoders.WatchOrListResponderWithEvents(
 		lap,
 		&encoders.WatchOrListResponderCfg{
 			Watch:          params.Watch,
@@ -182,5 +212,30 @@ func (lap *listAllPods) Handle(params core_v1.ListCoreV1PodForAllNamespacesParam
 			Cont:           params.Continue,
 		},
 		getResponder,
+		coreEncoder,
 	)
+}
+
+type managePods struct {
+	*PodMgr
+}
+
+func NewPodsMgr() management.PostManagementKubernetesIoV1PodsHandler {
+	return &managePods{
+		PodMgr: PodManager,
+	}
+}
+
+func (lPods *managePods) Handle(params management.PostManagementKubernetesIoV1PodsParams) middleware.Responder {
+	log.WithFields(logrus.Fields{
+		"Method": "POST",
+		"URL":    "/management/kubernetes.io/api/v1/pods",
+		"Params": params.HTTPRequest.URL.RawQuery,
+	}).Debug("request received")
+
+	totalPods := int64(params.Options.Add) - int64(params.Options.Del)
+
+	encoders.GenerateK8sEvents(lPods, totalPods)
+
+	return management.NewPostManagementKubernetesIoV1PodsAccepted()
 }

@@ -12,6 +12,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
+	"github.com/sirupsen/logrus"
 	k8sCoreV1 "k8s.io/api/core/v1"
 	k8sRuntime "k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/serializer"
@@ -19,6 +20,13 @@ import (
 )
 
 var log = logging.DefaultLogger.WithField(logfields.LogSubsys, "v1/core")
+
+type logger struct {
+}
+
+func (*logger) Log() *logrus.Logger {
+	return log.Logger
+}
 
 var (
 	coreEncoder k8sRuntime.Encoder

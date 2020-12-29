@@ -8,6 +8,20 @@ produces:
 consumes:
   - application/json
 paths:
+  "/management/kubernetes.io/v1/pods":
+    post:
+      responses:
+        '200':
+          description: OK
+        '202':
+          description: Accepted
+      schemes:
+      - http
+      tags:
+      - cilium
+      parameters:
+        - "$ref": "#/parameters/options"
+      operationId: "PostManagementKubernetesIoV1Pods"
   "/management/cilium.io/v2/ciliumendpoints":
     post:
       responses:
