@@ -3,7 +3,6 @@ module github.com/cilium/kube-apate
 go 1.15
 
 require (
-	github.com/cilium/arping v1.0.1-0.20201126164629-5142c9527af5 // indirect
 	github.com/cilium/cilium v1.9.0-rc1.0.20201223091924-6924a5d87f8b
 	github.com/containernetworking/plugins v0.8.2
 	github.com/go-openapi/errors v0.19.6
@@ -13,7 +12,6 @@ require (
 	github.com/go-openapi/strfmt v0.19.5
 	github.com/go-openapi/swag v0.19.9
 	github.com/go-openapi/validate v0.19.10
-	github.com/go-sql-driver/mysql v1.5.0 // indirect
 	github.com/sirupsen/logrus v1.6.0
 	github.com/spf13/cobra v1.1.1
 	github.com/spf13/viper v1.7.0
@@ -23,6 +21,7 @@ require (
 	k8s.io/api v0.20.1
 	k8s.io/apiextensions-apiserver v0.20.1
 	k8s.io/apimachinery v0.20.1
+	k8s.io/apiserver v0.20.1
 )
 
 replace (

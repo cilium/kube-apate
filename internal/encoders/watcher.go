@@ -13,8 +13,11 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/sirupsen/logrus"
 	k8sMetaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	k8sFields "k8s.io/apimachinery/pkg/fields"
+	k8sLabels "k8s.io/apimachinery/pkg/labels"
 	k8sRuntime "k8s.io/apimachinery/pkg/runtime"
 	k8sWatch "k8s.io/apimachinery/pkg/watch"
+	k8sStorage "k8s.io/apiserver/pkg/storage"
 )
 
 type lister interface {
@@ -31,6 +34,9 @@ type WatchOrListResponderCfg struct {
 	TimeoutSeconds *int64
 	Limit          *int64
 	Cont           *string
+	FieldSelector  *string
+	LabelSelector  *string
+	Matcher        func(label k8sLabels.Selector, field k8sFields.Selector) k8sStorage.SelectionPredicate
 }
 
 type getResponder func(obj k8sRuntime.Object) middleware.Responder
@@ -78,6 +84,34 @@ func WatchOrListResponderWithEvents(lister streamLister, params *WatchOrListResp
 		return middleware.ResponderFunc(func(w http.ResponseWriter, producer runtime.Producer) {
 			c := time.NewTimer(time.Duration(timeout) * time.Second)
 			st := lister.Stream()
+			var (
+				lSel k8sLabels.Selector
+				fSel k8sFields.Selector
+			)
+			if params.FieldSelector != nil {
+				var err error
+				fSel, err = k8sFields.ParseSelector(*params.FieldSelector)
+				if err != nil {
+					w.WriteHeader(http.StatusInternalServerError)
+					return
+				}
+			} else {
+				fSel = k8sFields.Everything()
+			}
+			if params.LabelSelector != nil {
+				var err error
+				lSel, err = k8sLabels.Parse(*params.LabelSelector)
+				if err != nil {
+					w.WriteHeader(http.StatusInternalServerError)
+					return
+				}
+			} else {
+				lSel = k8sLabels.Everything()
+			}
+			var sp k8sStorage.SelectionPredicate
+			if params.Matcher != nil {
+				sp = params.Matcher(lSel, fSel)
+			}
 			for {
 				select {
 				case <-c.C:
@@ -87,12 +121,24 @@ func WatchOrListResponderWithEvents(lister streamLister, params *WatchOrListResp
 						st = lister.Stream()
 						continue
 					}
-					err := enc.Encode(obj, w)
-					if err != nil {
-						w.WriteHeader(http.StatusInternalServerError)
+					matches := true
+					if params.Matcher != nil {
+						var err error
+						matches, err = sp.Matches(obj)
+						if err != nil {
+							w.WriteHeader(http.StatusInternalServerError)
+							continue
+						}
 					}
-					if f, ok := w.(http.Flusher); ok {
-						f.Flush()
+					if matches {
+						err := enc.Encode(obj, w)
+						if err != nil {
+							w.WriteHeader(http.StatusInternalServerError)
+							continue
+						}
+						if f, ok := w.(http.Flusher); ok {
+							f.Flush()
+						}
 					}
 				}
 				c.Reset(time.Duration(timeout) * time.Second)
