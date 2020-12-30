@@ -78,7 +78,7 @@ func (p *PodMgr) AddElements(elem int64) int64 {
 	p.Lock()
 	defer p.Unlock()
 	oldElem := p.totalGenElem
-	p.totalGenElem = elem
+	p.totalGenElem += elem
 	return oldElem
 }
 
@@ -217,12 +217,14 @@ func (lap *listAllPods) Handle(params core_v1.ListCoreV1PodForAllNamespacesParam
 }
 
 type managePods struct {
-	*PodMgr
+	podMgr *PodMgr
+	cepMgr encoders.ObjHandler
 }
 
-func NewPodsMgr() management.PostManagementKubernetesIoV1PodsHandler {
+func NewPodsMgr(cepMgr encoders.ObjHandler) management.PostManagementKubernetesIoV1PodsHandler {
 	return &managePods{
-		PodMgr: PodManager,
+		podMgr: PodManager,
+		cepMgr: cepMgr,
 	}
 }
 
@@ -235,7 +237,11 @@ func (lPods *managePods) Handle(params management.PostManagementKubernetesIoV1Po
 
 	totalPods := int64(params.Options.Add) - int64(params.Options.Del)
 
-	encoders.GenerateK8sEvents(lPods, totalPods)
+	if params.Options.WithDependents {
+		encoders.GenerateK8sEventsWithDependent(lPods.podMgr, lPods.cepMgr, totalPods)
+	} else {
+		encoders.GenerateK8sEvents(lPods.podMgr, totalPods)
+	}
 
 	return management.NewPostManagementKubernetesIoV1PodsAccepted()
 }

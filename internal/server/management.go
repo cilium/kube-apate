@@ -75,7 +75,7 @@ func initializeManagementAPI() *managementRestAPI.ManagementAPI {
 	//
 	// POST /management/kubernetes.io/api/v1/pods
 	restAPI.CiliumPostManagementKubernetesIoV1PodsHandler =
-		internalK8sCoreV1.NewPodsMgr()
+		internalK8sCoreV1.NewPodsMgr(internalCiliumV2.CEManager)
 	//
 	// // GET /api/v1/services
 	// restAPI.CoreV1ListCoreV1ServiceForAllNamespacesHandler =
