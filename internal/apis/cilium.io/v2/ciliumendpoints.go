@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"sync"
 
+	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
 	"github.com/cilium/kube-apate/api/k8s/v1/server/restapi/cilium"
 	management "github.com/cilium/kube-apate/api/management/v1/server/restapi/cilium"
 	"github.com/cilium/kube-apate/internal/encoders"
@@ -35,6 +37,7 @@ type CEConfig struct {
 	Name        string
 	Namespace   string
 	ContainerID string
+	OwnerUID    string
 	UID         string
 	LocalID     int64
 	Identity    *ciliumV2.EndpointIdentity
@@ -95,6 +98,15 @@ func (n *CEMgr) getItem(cfg *CEConfig) *ciliumV2.CiliumEndpoint {
 	ce.Name = cfg.Name
 	ce.Namespace = cfg.Namespace
 	ce.UID = k8sTypes.UID(cfg.UID)
+	ce.OwnerReferences = []v1.OwnerReference{
+		{
+			APIVersion:         "v1",
+			Kind:               "Pod",
+			Name:               cfg.Name,
+			UID:                k8sTypes.UID(cfg.OwnerUID),
+			BlockOwnerDeletion: func() *bool { a := true; return &a }(),
+		},
+	}
 	ce.Status.ExternalIdentifiers = &models.EndpointIdentifiers{
 		ContainerID:  cfg.ContainerID,
 		K8sNamespace: cfg.Namespace,
@@ -147,6 +159,7 @@ func (n *CEMgr) GenObjs(start, maxElemts int64) <-chan k8sRuntime.Object {
 			ceCfg.Namespace = generators.NamespaceName(i)
 			ceCfg.LocalID = generators.CELocalID(i)
 			ceCfg.ContainerID = generators.ContainerID(i)
+			ceCfg.OwnerUID = generators.PodUUID(i)
 			ceCfg.Identity = &ciliumV2.EndpointIdentity{
 				ID:     generators.CELocalID(i),
 				Labels: generators.CiliumEndpointLabels(i),
