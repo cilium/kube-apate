@@ -223,7 +223,7 @@ func (lPods *managePods) Handle(params management.PostManagementKubernetesIoV1Po
 		"Params": params.HTTPRequest.URL.RawQuery,
 	}).Debug("request received")
 
-	totalPods := int64(params.Options.Add) - int64(params.Options.Del)
+	totalPods := params.Options.Add - params.Options.Del
 
 	if params.Options.WithDependents {
 		encoders.GenerateK8sEventsWithDependent(lPods.podMgr, lPods.cepMgr, totalPods)

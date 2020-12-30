@@ -131,29 +131,20 @@ func init() {
     }
   },
   "definitions": {
-    "add": {
-      "description": "add N random new Objects",
-      "type": "integer"
-    },
-    "del": {
-      "description": "del N random new Objects",
-      "type": "integer"
-    },
-    "dependents": {
-      "description": "if possible, create dependent Objects",
-      "type": "boolean"
-    },
     "options": {
       "type": "object",
       "properties": {
         "add": {
-          "$ref": "#/definitions/add"
+          "description": "add N random new Objects",
+          "type": "integer"
         },
         "del": {
-          "$ref": "#/definitions/del"
+          "description": "del N random new Objects",
+          "type": "integer"
         },
         "with-dependents": {
-          "$ref": "#/definitions/dependents"
+          "description": "if possible, create dependent Objects",
+          "type": "boolean"
         }
       }
     }
@@ -300,29 +291,20 @@ func init() {
     }
   },
   "definitions": {
-    "add": {
-      "description": "add N random new Objects",
-      "type": "integer"
-    },
-    "del": {
-      "description": "del N random new Objects",
-      "type": "integer"
-    },
-    "dependents": {
-      "description": "if possible, create dependent Objects",
-      "type": "boolean"
-    },
     "options": {
       "type": "object",
       "properties": {
         "add": {
-          "$ref": "#/definitions/add"
+          "description": "add N random new Objects",
+          "type": "integer"
         },
         "del": {
-          "$ref": "#/definitions/del"
+          "description": "del N random new Objects",
+          "type": "integer"
         },
         "with-dependents": {
-          "$ref": "#/definitions/dependents"
+          "description": "if possible, create dependent Objects",
+          "type": "boolean"
         }
       }
     }

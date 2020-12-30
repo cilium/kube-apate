@@ -324,7 +324,7 @@ func (lcn *manageCiliumNodes) Handle(params management.PostManagementCiliumIoV2C
 		"Params": params.HTTPRequest.URL.RawQuery,
 	}).Debug("request received")
 
-	totalCNs := int64(params.Options.Add) - int64(params.Options.Del)
+	totalCNs := params.Options.Add - params.Options.Del
 
 	encoders.GenerateK8sEvents(lcn, totalCNs)
 

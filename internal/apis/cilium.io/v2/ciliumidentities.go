@@ -199,7 +199,7 @@ func (lCI *manageCiliumIdentities) Handle(params management.PostManagementCilium
 		"Params": params.HTTPRequest.URL.RawQuery,
 	}).Debug("request received")
 
-	totalCIPs := int64(params.Options.Add) - int64(params.Options.Del)
+	totalCIPs := params.Options.Add - params.Options.Del
 
 	encoders.GenerateK8sEvents(lCI, totalCIPs)
 

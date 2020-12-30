@@ -38,9 +38,9 @@ func init() {
 
 func addNewPods(add, del int64, withDeps bool) {
 	err := client.KubernetesPodsAdd(&models.Options{
-		Add:            models.Add(add),
-		Del:            models.Del(del),
-		WithDependents: models.Dependents(withDeps),
+		Add:            add,
+		Del:            del,
+		WithDependents: withDeps,
 	})
 	if err != nil {
 		panic(err)

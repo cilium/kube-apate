@@ -254,7 +254,7 @@ func (lce *manageCiliumEndpoints) Handle(params management.PostManagementCiliumI
 		"Params": params.HTTPRequest.URL.RawQuery,
 	}).Debug("request received")
 
-	totalCEPs := int64(params.Options.Add) - int64(params.Options.Del)
+	totalCEPs := params.Options.Add - params.Options.Del
 
 	encoders.GenerateK8sEvents(lce, totalCEPs)
 

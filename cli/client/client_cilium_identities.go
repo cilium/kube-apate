@@ -34,8 +34,8 @@ func init() {
 
 func addNewCIs(add, del int64) {
 	err := client.CiliumIdentitiesAdd(&models.Options{
-		Add: models.Add(add),
-		Del: models.Del(del),
+		Add: add,
+		Del: del,
 	})
 	if err != nil {
 		panic(err)

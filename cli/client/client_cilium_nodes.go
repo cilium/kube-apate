@@ -34,8 +34,8 @@ func init() {
 
 func addNewCNs(add, del int64) {
 	err := client.CiliumNodesAdd(&models.Options{
-		Add: models.Add(add),
-		Del: models.Del(del),
+		Add: add,
+		Del: del,
 	})
 	if err != nil {
 		panic(err)

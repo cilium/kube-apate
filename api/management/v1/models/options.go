@@ -9,7 +9,6 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -19,83 +18,18 @@ import (
 // swagger:model options
 type Options struct {
 
-	// add
-	Add Add `json:"add,omitempty"`
+	// add N random new Objects
+	Add int64 `json:"add,omitempty"`
 
-	// del
-	Del Del `json:"del,omitempty"`
+	// del N random new Objects
+	Del int64 `json:"del,omitempty"`
 
-	// with dependents
-	WithDependents Dependents `json:"with-dependents,omitempty"`
+	// if possible, create dependent Objects
+	WithDependents bool `json:"with-dependents,omitempty"`
 }
 
 // Validate validates this options
 func (m *Options) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := m.validateAdd(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateDel(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateWithDependents(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (m *Options) validateAdd(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.Add) { // not required
-		return nil
-	}
-
-	if err := m.Add.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("add")
-		}
-		return err
-	}
-
-	return nil
-}
-
-func (m *Options) validateDel(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.Del) { // not required
-		return nil
-	}
-
-	if err := m.Del.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("del")
-		}
-		return err
-	}
-
-	return nil
-}
-
-func (m *Options) validateWithDependents(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.WithDependents) { // not required
-		return nil
-	}
-
-	if err := m.WithDependents.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("with-dependents")
-		}
-		return err
-	}
-
 	return nil
 }
 

@@ -34,8 +34,8 @@ func init() {
 
 func addNewCEPs(add, del int64) {
 	err := client.CiliumEndpointsAdd(&models.Options{
-		Add: models.Add(add),
-		Del: models.Del(del),
+		Add: add,
+		Del: del,
 	})
 	if err != nil {
 		panic(err)

@@ -46,6 +46,21 @@ func configureAPI(api *restapi.ManagementAPI) http.Handler {
 			return middleware.NotImplemented("operation cilium.PostManagementCiliumIoV2CiliumEndpoints has not yet been implemented")
 		})
 	}
+	if api.CiliumPostManagementCiliumIoV2CiliumIdentitiesHandler == nil {
+		api.CiliumPostManagementCiliumIoV2CiliumIdentitiesHandler = cilium.PostManagementCiliumIoV2CiliumIdentitiesHandlerFunc(func(params cilium.PostManagementCiliumIoV2CiliumIdentitiesParams) middleware.Responder {
+			return middleware.NotImplemented("operation cilium.PostManagementCiliumIoV2CiliumIdentities has not yet been implemented")
+		})
+	}
+	if api.CiliumPostManagementCiliumIoV2CiliumNodesHandler == nil {
+		api.CiliumPostManagementCiliumIoV2CiliumNodesHandler = cilium.PostManagementCiliumIoV2CiliumNodesHandlerFunc(func(params cilium.PostManagementCiliumIoV2CiliumNodesParams) middleware.Responder {
+			return middleware.NotImplemented("operation cilium.PostManagementCiliumIoV2CiliumNodes has not yet been implemented")
+		})
+	}
+	if api.CiliumPostManagementKubernetesIoV1PodsHandler == nil {
+		api.CiliumPostManagementKubernetesIoV1PodsHandler = cilium.PostManagementKubernetesIoV1PodsHandlerFunc(func(params cilium.PostManagementKubernetesIoV1PodsParams) middleware.Responder {
+			return middleware.NotImplemented("operation cilium.PostManagementKubernetesIoV1Pods has not yet been implemented")
+		})
+	}
 
 	api.PreServerShutdown = func() {}
 
