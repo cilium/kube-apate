@@ -81,7 +81,7 @@ func TestGetHostOfPodIPv6(t *testing.T) {
 			args: args{
 				ipStr: "fd01:beef:beef::0:0",
 			},
-			want: "fd00:beef:beef::0",
+			want: "fd00:beef:beef::",
 		},
 		{
 			name: "test-2",
@@ -143,7 +143,7 @@ func TestGetPodIP(t *testing.T) {
 				idx: 0,
 			},
 			wantV4: "10.0.0.0",
-			wantV6: "fd01:beef:beef::0:0",
+			wantV6: "fd01:beef:beef::",
 		},
 		{
 			name: "test-2",
@@ -151,7 +151,7 @@ func TestGetPodIP(t *testing.T) {
 				idx: 256 - 1,
 			},
 			wantV4: "10.0.0.255",
-			wantV6: "fd01:beef:beef::0:ff",
+			wantV6: "fd01:beef:beef::ff",
 		},
 		{
 			name: "test-3",
@@ -159,7 +159,7 @@ func TestGetPodIP(t *testing.T) {
 				idx: 256,
 			},
 			wantV4: "10.0.1.0",
-			wantV6: "fd01:beef:beef::0:100",
+			wantV6: "fd01:beef:beef::100",
 		},
 		{
 			name: "test-4",
@@ -167,7 +167,7 @@ func TestGetPodIP(t *testing.T) {
 				idx: 257,
 			},
 			wantV4: "10.0.1.1",
-			wantV6: "fd01:beef:beef::0:101",
+			wantV6: "fd01:beef:beef::101",
 		},
 		{
 			name: "test-5",
@@ -175,7 +175,7 @@ func TestGetPodIP(t *testing.T) {
 				idx: 258,
 			},
 			wantV4: "10.0.1.2",
-			wantV6: "fd01:beef:beef::0:102",
+			wantV6: "fd01:beef:beef::102",
 		},
 		{
 			name: "test-6",
@@ -183,7 +183,7 @@ func TestGetPodIP(t *testing.T) {
 				idx: 65536 - 1,
 			},
 			wantV4: "10.0.255.255",
-			wantV6: "fd01:beef:beef::0:ffff",
+			wantV6: "fd01:beef:beef::ffff",
 		},
 		{
 			name: "test-7",
@@ -237,7 +237,7 @@ func TestGetPodCIDR(t *testing.T) {
 				hostIdx: 0,
 			},
 			wantV4: "10.0.0.0/25",
-			wantV6: "fd01:beef:beef::0:0/121",
+			wantV6: "fd01:beef:beef::/121",
 		},
 		{
 			name: "test-2",
@@ -245,7 +245,7 @@ func TestGetPodCIDR(t *testing.T) {
 				hostIdx: 1,
 			},
 			wantV4: "10.0.0.128/25",
-			wantV6: "fd01:beef:beef::0:80/121",
+			wantV6: "fd01:beef:beef::80/121",
 		},
 		{
 			name: "test-3",
@@ -253,7 +253,7 @@ func TestGetPodCIDR(t *testing.T) {
 				hostIdx: 2,
 			},
 			wantV4: "10.0.1.0/25",
-			wantV6: "fd01:beef:beef::0:100/121",
+			wantV6: "fd01:beef:beef::100/121",
 		},
 		{
 			name: "test-4",
@@ -261,7 +261,7 @@ func TestGetPodCIDR(t *testing.T) {
 				hostIdx: 3,
 			},
 			wantV4: "10.0.1.128/25",
-			wantV6: "fd01:beef:beef::0:180/121",
+			wantV6: "fd01:beef:beef::180/121",
 		},
 		{
 			name: "test-5",
@@ -269,7 +269,7 @@ func TestGetPodCIDR(t *testing.T) {
 				hostIdx: 512 - 1,
 			},
 			wantV4: "10.0.255.128/25",
-			wantV6: "fd01:beef:beef::0:ff80/121",
+			wantV6: "fd01:beef:beef::ff80/121",
 		},
 		{
 			name: "test-6",
@@ -323,7 +323,7 @@ func TestGetHostIP(t *testing.T) {
 				hostIdx: 0,
 			},
 			wantV4: "172.16.0.0",
-			wantV6: "fd00:beef:beef::0",
+			wantV6: "fd00:beef:beef::",
 		},
 		{
 			name: "test-2",
@@ -417,7 +417,7 @@ func TestGetServiceIP(t *testing.T) {
 				svcIdx: 0,
 			},
 			wantV4: "172.20.0.0",
-			wantV6: "fd02:beef:beef::0",
+			wantV6: "fd02:beef:beef::",
 		},
 		{
 			name: "test-2",
