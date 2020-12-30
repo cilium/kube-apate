@@ -52,7 +52,7 @@ func (svcMgr *ServiceMgr) AddElements(elem int64) int64 {
 	svcMgr.Lock()
 	defer svcMgr.Unlock()
 	oldElem := svcMgr.totalGenElem
-	svcMgr.totalGenElem = elem
+	svcMgr.totalGenElem += elem
 	return oldElem
 }
 
