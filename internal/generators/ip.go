@@ -27,6 +27,9 @@ var (
 	hostCIDRMaskv6 = net.CIDRMask(115, 128)
 
 	// PodCIDRs    -> X.X.X.X/25 and ::/121 gives 128 pods for each node
+	maxPodsPerHost    = int64(1 << (32 - 25)) // 128
+	hostPodCIDRMaskv4 = net.CIDRMask(25, 32)
+	hostPodCIDRMaskv6 = net.CIDRMask(121, 128)
 
 	// PodIPs      -> 10.0.0.0/12 and fd01:beef:beef:0000::/108 creates 8192*128 pods for the cluster
 	maxPods       = int64(1 << (32 - 12)) // 1048576

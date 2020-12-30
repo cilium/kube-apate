@@ -160,7 +160,7 @@ func (p *PodMgr) GenObj(idx int64) k8sRuntime.Object {
 		},
 	}
 	pCfg.HostIP = generators.GetHostOfPodIPv4(podIPv4)
-	pCfg.NodeName = generators.NodeName(idx)
+	pCfg.NodeName = generators.NodeNameOfPodIdx(idx)
 	pCfg.UUID = generators.PodUUID(idx)
 	pCfg.Idx = idx
 	pCfg.PodLabels = generators.PodLabels(idx)

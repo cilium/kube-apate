@@ -51,6 +51,13 @@ func NodeName(idx int64) string {
 	return "node-" + strconv.FormatInt(idx, 10)
 }
 
+// NodeNameOfPodIdx returns the Node Name that is hosting the Pod with the
+// given index.
+func NodeNameOfPodIdx(idx int64) string {
+	hostIdx := idx / maxPodsPerHost
+	return NodeName(hostIdx)
+}
+
 func PodName(idx int64) string {
 	return "pod-" + strconv.FormatInt(idx, 10)
 }
