@@ -16,8 +16,13 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/sirupsen/logrus"
 	k8sCoreV1 "k8s.io/api/core/v1"
+	k8sMetaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	k8sFields "k8s.io/apimachinery/pkg/fields"
+	k8sLabels "k8s.io/apimachinery/pkg/labels"
 	k8sRuntime "k8s.io/apimachinery/pkg/runtime"
 	k8sTypes "k8s.io/apimachinery/pkg/types"
+	k8sGeneric "k8s.io/apiserver/pkg/registry/generic"
+	k8sStorage "k8s.io/apiserver/pkg/storage"
 )
 
 const (
@@ -198,6 +203,16 @@ func (lap *listAllPods) Handle(params core_v1.ListCoreV1PodForAllNamespacesParam
 			TimeoutSeconds: params.TimeoutSeconds,
 			Limit:          params.Limit,
 			Cont:           params.Continue,
+			Matcher: func(label k8sLabels.Selector, field k8sFields.Selector) k8sStorage.SelectionPredicate {
+				return k8sStorage.SelectionPredicate{
+					Label:       label,
+					Field:       field,
+					GetAttrs:    GetPodAttrs,
+					IndexFields: []string{"spec.nodeName"},
+				}
+			},
+			FieldSelector: params.FieldSelector,
+			LabelSelector: params.LabelSelector,
 		},
 		getResponder,
 		coreEncoder,
@@ -232,4 +247,42 @@ func (lPods *managePods) Handle(params management.PostManagementKubernetesIoV1Po
 	}
 
 	return management.NewPostManagementKubernetesIoV1PodsAccepted()
+}
+
+// Code retrieved from Kubernetes to avoid importing the k8s.io/kubernetes
+
+// ToSelectableFields returns a field set that represents the object
+// TODO: fields are not labels, and the validation rules for them do not apply.
+func ToSelectableFields(pod *k8sCoreV1.Pod) k8sFields.Set {
+	// The purpose of allocation with a given number of elements is to reduce
+	// amount of allocations needed to create the fields.Set. If you add any
+	// field here or the number of object-meta related fields changes, this should
+	// be adjusted.
+	podSpecificFieldsSet := make(k8sFields.Set, 9)
+	podSpecificFieldsSet["spec.nodeName"] = pod.Spec.NodeName
+	podSpecificFieldsSet["spec.restartPolicy"] = string(pod.Spec.RestartPolicy)
+	podSpecificFieldsSet["spec.schedulerName"] = string(pod.Spec.SchedulerName)
+	podSpecificFieldsSet["spec.serviceAccountName"] = string(pod.Spec.ServiceAccountName)
+	podSpecificFieldsSet["status.phase"] = string(pod.Status.Phase)
+	// TODO: add podIPs as a downward API value(s) with proper format
+	podIP := ""
+	if len(pod.Status.PodIPs) > 0 {
+		podIP = string(pod.Status.PodIPs[0].IP)
+	}
+	podSpecificFieldsSet["status.podIP"] = podIP
+	podSpecificFieldsSet["status.nominatedNodeName"] = string(pod.Status.NominatedNodeName)
+	return k8sGeneric.AddObjectMetaFieldsSet(podSpecificFieldsSet, &pod.ObjectMeta, true)
+}
+
+// GetPodAttrs returns labels and fields of a given object for filtering purposes.
+func GetPodAttrs(obj k8sRuntime.Object) (k8sLabels.Set, k8sFields.Set, error) {
+	watchEvent, ok := obj.(*k8sMetaV1.WatchEvent)
+	if ok {
+		obj = watchEvent.Object.Object
+	}
+	pod, ok := obj.(*k8sCoreV1.Pod)
+	if !ok {
+		return nil, nil, fmt.Errorf("not a pod, but a %T", obj)
+	}
+	return pod.ObjectMeta.Labels, ToSelectableFields(pod), nil
 }
