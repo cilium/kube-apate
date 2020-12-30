@@ -139,6 +139,10 @@ func init() {
       "description": "del N random new Objects",
       "type": "integer"
     },
+    "dependents": {
+      "description": "if possible, create dependent Objects",
+      "type": "boolean"
+    },
     "options": {
       "type": "object",
       "properties": {
@@ -147,6 +151,9 @@ func init() {
         },
         "del": {
           "$ref": "#/definitions/del"
+        },
+        "with-dependents": {
+          "$ref": "#/definitions/dependents"
         }
       }
     }
@@ -301,6 +308,10 @@ func init() {
       "description": "del N random new Objects",
       "type": "integer"
     },
+    "dependents": {
+      "description": "if possible, create dependent Objects",
+      "type": "boolean"
+    },
     "options": {
       "type": "object",
       "properties": {
@@ -309,6 +320,9 @@ func init() {
         },
         "del": {
           "$ref": "#/definitions/del"
+        },
+        "with-dependents": {
+          "$ref": "#/definitions/dependents"
         }
       }
     }

@@ -6,6 +6,7 @@ package encoders
 import (
 	"net/http"
 	"strconv"
+	"sync"
 	"time"
 
 	"github.com/go-openapi/runtime"
@@ -129,29 +130,90 @@ type ObjHandler interface {
 	Log() *logrus.Logger
 }
 
-func GenerateK8sEvents(o ObjHandler, addElemts int64) {
+type ObjHandlerNoOp struct{}
+
+func (*ObjHandlerNoOp) AddElements(int64) int64 {
+	return 0
+}
+
+func (*ObjHandlerNoOp) GenObjs(_, _ int64) <-chan k8sRuntime.Object {
+	ch := make(chan k8sRuntime.Object)
+	close(ch)
+	return ch
+}
+
+func (*ObjHandlerNoOp) Stream() chan k8sRuntime.Object {
+	return nil
+}
+
+func (*ObjHandlerNoOp) Log() *logrus.Logger {
+	return logrus.New()
+}
+func GenerateK8sEventsWithDependent(owner, dependent ObjHandler, addElemts int64) {
+	generateK8sEventsWithDependent(owner, dependent, true, addElemts)
+}
+
+func GenerateK8sEvents(owner ObjHandler, addElemts int64) {
+	generateK8sEventsWithDependent(owner, &ObjHandlerNoOp{}, false, addElemts)
+}
+
+func generateK8sEventsWithDependent(owner, dependent ObjHandler, withDependent bool, addElemts int64) {
 	if addElemts == 0 {
 		return
 	}
-	prevTotal := o.AddElements(addElemts)
-	total := prevTotal + addElemts
+	prevOwnerTotal := owner.AddElements(addElemts)
+	ownerTotal := prevOwnerTotal + addElemts
+	dependent.AddElements(addElemts)
 
 	var (
-		eventType   string
-		totalEvents int64
-		objs        <-chan k8sRuntime.Object
+		eventType     string
+		totalEvents   int64
+		objs, depObjs <-chan k8sRuntime.Object
 	)
 	switch {
 	case addElemts < 0:
-		objs = o.GenObjs(total, prevTotal)
+		objs = owner.GenObjs(ownerTotal, prevOwnerTotal)
+		depObjs = dependent.GenObjs(ownerTotal, prevOwnerTotal)
 		eventType = string(k8sWatch.Deleted)
 		totalEvents = -addElemts
 	case addElemts > 0:
-		objs = o.GenObjs(prevTotal, total)
+		objs = owner.GenObjs(prevOwnerTotal, ownerTotal)
+		depObjs = dependent.GenObjs(prevOwnerTotal, ownerTotal)
 		eventType = string(k8sWatch.Added)
 		totalEvents = addElemts
 	}
-	streamer := o.Stream()
+	var (
+		wg           sync.WaitGroup
+		newDependent chan struct{}
+	)
+	if withDependent {
+		newDependent = make(chan struct{})
+	}
+
+	wg.Add(1)
+	go func() {
+		streamObjs(owner, objs, eventType, true, newDependent, totalEvents)
+		wg.Done()
+	}()
+
+	if withDependent {
+		wg.Add(1)
+		streamObjs(dependent, depObjs, eventType, false, newDependent, totalEvents)
+		wg.Done()
+	}
+
+	wg.Wait()
+}
+
+func streamObjs(
+	objHandler ObjHandler,
+	objs <-chan k8sRuntime.Object,
+	eventType string,
+	isOwner bool,
+	newDependent chan struct{},
+	totalEvents int64) {
+
+	streamer := objHandler.Stream()
 	for ce := range objs {
 		we := &k8sMetaV1.WatchEvent{
 			Type: eventType,
@@ -159,9 +221,21 @@ func GenerateK8sEvents(o ObjHandler, addElemts int64) {
 				Object: ce,
 			},
 		}
-		streamer <- we
+		if newDependent != nil {
+			if !isOwner {
+				// wait until the owner of this dependent is created first
+				<-newDependent
+				streamer <- we
+			} else {
+				streamer <- we
+				// wait until the dependent of this owner is created first
+				newDependent <- struct{}{}
+			}
+		} else {
+			streamer <- we
+		}
 	}
-	o.Log().WithFields(logrus.Fields{
+	objHandler.Log().WithFields(logrus.Fields{
 		"total-events": totalEvents,
 		"event-type":   eventType,
 	}).Info("Streamed Objects")

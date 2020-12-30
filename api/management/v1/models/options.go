@@ -24,6 +24,9 @@ type Options struct {
 
 	// del
 	Del Del `json:"del,omitempty"`
+
+	// with dependents
+	WithDependents Dependents `json:"with-dependents,omitempty"`
 }
 
 // Validate validates this options
@@ -35,6 +38,10 @@ func (m *Options) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateDel(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateWithDependents(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -69,6 +76,22 @@ func (m *Options) validateDel(formats strfmt.Registry) error {
 	if err := m.Del.Validate(formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("del")
+		}
+		return err
+	}
+
+	return nil
+}
+
+func (m *Options) validateWithDependents(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.WithDependents) { // not required
+		return nil
+	}
+
+	if err := m.WithDependents.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("with-dependents")
 		}
 		return err
 	}
