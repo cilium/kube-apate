@@ -116,6 +116,7 @@ func (n *CEMgr) getItem(cfg *CEConfig) *ciliumV2.CiliumEndpoint {
 	ce.Status.ID = cfg.LocalID
 	ce.Status.Identity = cfg.Identity
 	ce.Status.Networking = cfg.Networking
+	ce.Status.State = "ready"
 	return ce
 }
 
