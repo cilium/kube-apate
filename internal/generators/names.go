@@ -23,9 +23,18 @@ func CNPName(idx int64) string {
 	return "cnp-" + strconv.FormatInt(idx, 10)
 }
 
-func CIName(idx int64) string {
+func CIID(idx int64) int64 {
+	// Since the cardinality of the labels depend on the namespace, we will
+	// create an index depending on the max number of namespaces.
+	ciIdx := idx / maxNamespaces
 	// Avoid using any of the reserved identities
-	return strconv.FormatInt(2000+idx, 10)
+	ciIdx += 2000
+	return ciIdx
+}
+
+func CIName(idx int64) string {
+	ciIdx := CIID(idx)
+	return strconv.FormatInt(ciIdx, 10)
 }
 
 func CLRPName(idx int64) string {

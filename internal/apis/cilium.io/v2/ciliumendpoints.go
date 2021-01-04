@@ -161,7 +161,7 @@ func (n *CEMgr) GenObjs(start, maxElemts int64) <-chan k8sRuntime.Object {
 			ceCfg.ContainerID = generators.ContainerID(i)
 			ceCfg.OwnerUID = generators.PodUUID(i)
 			ceCfg.Identity = &ciliumV2.EndpointIdentity{
-				ID:     generators.CELocalID(i),
+				ID:     generators.CIID(i),
 				Labels: generators.CiliumEndpointLabels(i),
 			}
 			ceCfg.Networking = &ciliumV2.EndpointNetworking{
