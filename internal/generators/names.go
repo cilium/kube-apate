@@ -7,6 +7,14 @@ import (
 	"strconv"
 )
 
+const (
+	// maxNamespaces defines the maximum number of namespaces in a cluster.
+	// The bigger the number of namespaces, the bigger is the cardinality of
+	// labels used in the security identities. The number of namespaces in a
+	// cluster only affects Cilium scalability with the cardinality of labels.
+	maxNamespaces = int64(50)
+)
+
 func CCNPName(idx int64) string {
 	return "ccnp-" + strconv.FormatInt(idx, 10)
 }
@@ -40,11 +48,9 @@ func NetPolName(idx int64) string {
 	return "netpol-" + strconv.FormatInt(idx, 10)
 }
 
-// const uniqueSet = 50
-// "k8s-app.name":                        fmt.Sprintf("front-a-%d", idx%uniqueSet),
-
 func NamespaceName(idx int64) string {
-	return "ns-" + strconv.FormatInt(idx, 10)
+	nsIdx := idx / maxNamespaces
+	return "ns-" + strconv.FormatInt(nsIdx, 10)
 }
 
 func NodeName(idx int64) string {
