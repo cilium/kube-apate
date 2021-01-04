@@ -14,3 +14,10 @@ func (c *Client) KubernetesPodsAdd(opts *models.Options) error {
 	_, _, err := c.Cilium.PostManagementKubernetesIoV1Pods(params)
 	return err
 }
+
+func (c *Client) KubernetesNodesAdd(opts *models.Options) error {
+	params := cilium.NewPostManagementKubernetesIoV1NodesParams().WithOptions(opts).WithTimeout(ClientTimeout)
+
+	_, _, err := c.Cilium.PostManagementKubernetesIoV1Nodes(params)
+	return err
+}

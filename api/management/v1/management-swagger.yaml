@@ -22,6 +22,20 @@ paths:
       parameters:
         - "$ref": "#/parameters/options"
       operationId: "PostManagementKubernetesIoV1Pods"
+  "/management/kubernetes.io/v1/nodes":
+    post:
+      responses:
+        '200':
+          description: OK
+        '202':
+          description: Accepted
+      schemes:
+      - http
+      tags:
+      - cilium
+      parameters:
+        - "$ref": "#/parameters/options"
+      operationId: "PostManagementKubernetesIoV1Nodes"
   "/management/cilium.io/v2/ciliumendpoints":
     post:
       responses:

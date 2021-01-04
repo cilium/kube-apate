@@ -1,4 +1,4 @@
-// Copyright 2020 Authors of Cilium
+// Copyright 2020-2021 Authors of Cilium
 // SPDX-License-Identifier: Apache-2.0
 
 package server
@@ -45,21 +45,9 @@ func initializeManagementAPI() *managementRestAPI.ManagementAPI {
 	// restAPI.DiscoveryV1beta1ReadDiscoveryV1beta1NamespacedEndpointSliceHandler =
 	// 	internalK8sDiscoveryV1beta1.NewReadDiscoveryV1beta1NamespacedEndpointSliceHandler()
 	//
-	// // GET /api/v1/nodes/{nodes}
-	// restAPI.CoreV1ReadCoreV1NodeHandler =
-	// 	internalK8sCoreV1.NewReadCoreV1Node()
-	//
-	// // GET /api/v1/nodes
-	// restAPI.CoreV1ListCoreV1NodeHandler =
-	// 	internalK8sCoreV1.NewListCoreV1Node()
-	//
-	// // PATCH /api/v1/nodes/{nodes}
-	// restAPI.CoreV1PatchCoreV1NodeHandler =
-	// 	internalK8sCoreV1.NewPatchCoreV1Node()
-	//
-	// // PATCH /api/v1/nodes/{nodes}/status
-	// restAPI.CoreV1PatchCoreV1NodeStatusHandler =
-	// 	internalK8sCoreV1.NewPatchCoreV1NodeStatus()
+	// POST /management/kubernetes.io/api/v1/nodes
+	restAPI.CiliumPostManagementKubernetesIoV1NodesHandler =
+		internalK8sCoreV1.NewNodesMgr(internalCiliumV2.CiliumNodeManager)
 	//
 	// // GET /apis/apiextensions.k8s.io/v1/customresourcedefinitions
 	// restAPI.ApiextensionsV1ListApiextensionsV1CustomResourceDefinitionHandler =

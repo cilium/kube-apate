@@ -1,4 +1,4 @@
-// Copyright 2020 Authors of Cilium
+// Copyright 2020-2021 Authors of Cilium
 // SPDX-License-Identifier: Apache-2.0
 
 package core
@@ -8,6 +8,7 @@ import (
 	"sync"
 
 	"github.com/cilium/kube-apate/api/k8s/v1/server/restapi/core_v1"
+	management "github.com/cilium/kube-apate/api/management/v1/server/restapi/cilium"
 	"github.com/cilium/kube-apate/internal/encoders"
 	"github.com/cilium/kube-apate/internal/generators"
 	"github.com/cilium/kube-apate/utils"
@@ -15,15 +16,24 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/sirupsen/logrus"
 	k8sCoreV1 "k8s.io/api/core/v1"
+	k8sMetaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	k8sFields "k8s.io/apimachinery/pkg/fields"
+	k8sLabels "k8s.io/apimachinery/pkg/labels"
 	k8sRuntime "k8s.io/apimachinery/pkg/runtime"
 	k8sTypes "k8s.io/apimachinery/pkg/types"
+	k8sGeneric "k8s.io/apiserver/pkg/registry/generic"
+	k8sStorage "k8s.io/apiserver/pkg/storage"
 )
 
 const (
 	Node = "node"
 )
 
-var NodeManager = &NodeMgr{}
+var NodeManager = &NodeMgr{
+	staticList:   &k8sCoreV1.NodeList{},
+	elemTemplate: &k8sCoreV1.Node{},
+	streamCh:     make(chan k8sRuntime.Object),
+}
 
 type NodeConfig struct {
 	Name           string
@@ -37,7 +47,9 @@ type NodeConfig struct {
 }
 
 type NodeMgr struct {
+	logger
 	sync.RWMutex
+	streamCh     chan k8sRuntime.Object
 	totalGenElem int64
 	staticList   *k8sCoreV1.NodeList
 	elemTemplate *k8sCoreV1.Node
@@ -141,19 +153,42 @@ func (n *NodeMgr) List(start, limit int64) (k8sRuntime.Object, error) {
 	maxElemts := utils.Min(totalElems, limit)
 	nodeList.Continue = utils.Cont(start, totalElems, limit)
 
-	nCfg := &NodeConfig{}
-	for i := start; i < maxElemts; i++ {
-		nCfg.Name = generators.NodeName(i)
-		nCfg.IPv4, nCfg.IPv6 = generators.GetHostIP(i)
-		nCfg.PodCIDRv4, nCfg.PodCIDRv6 = generators.GetPodCIDR(i)
-		nCfg.CiliumHostIP = generators.IPFromCIDR(nCfg.PodCIDRv4, 125)
-		nCfg.CiliumHealthIP = generators.IPFromCIDR(nCfg.PodCIDRv4, 126)
-		nCfg.UUID = generators.NodeUUID(i)
-		ns := n.getItem(nCfg)
-		nodeList.Items = append(nodeList.Items, *ns)
+	genPods := n.GenObjs(start, maxElemts)
+	for obj := range genPods {
+		node := obj.(*k8sCoreV1.Node)
+		nodeList.Items = append(nodeList.Items, *node)
 	}
 
 	return nodeList, nil
+}
+
+func (n *NodeMgr) GenObjs(start, maxElemts int64) <-chan k8sRuntime.Object {
+	ch := make(chan k8sRuntime.Object)
+	go func() {
+		for i := start; i < maxElemts; i++ {
+			ch <- n.GenObj(i)
+		}
+		close(ch)
+	}()
+	return ch
+}
+
+func (n *NodeMgr) GenObj(idx int64) k8sRuntime.Object {
+	nCfg := &NodeConfig{}
+	nCfg.Name = generators.NodeName(idx)
+	nCfg.IPv4, nCfg.IPv6 = generators.GetHostIP(idx)
+	nCfg.PodCIDRv4, nCfg.PodCIDRv6 = generators.GetPodCIDR(idx)
+	nCfg.CiliumHostIP = generators.IPFromCIDR(nCfg.PodCIDRv4, 125)
+	nCfg.CiliumHealthIP = generators.IPFromCIDR(nCfg.PodCIDRv4, 126)
+	nCfg.UUID = generators.NodeUUID(idx)
+	return n.getItem(nCfg)
+}
+
+func (n *NodeMgr) Stream() chan k8sRuntime.Object {
+	n.RWMutex.RLock()
+	streamer := n.streamCh
+	n.RWMutex.RUnlock()
+	return streamer
 }
 
 type getNode struct {
@@ -239,14 +274,79 @@ func (lan *listAllNodes) Handle(params core_v1.ListCoreV1NodeParams) middleware.
 		"Params": params.HTTPRequest.URL.RawQuery,
 	}).Debug("request received")
 
-	return encoders.WatchOrListResponder(
+	return encoders.WatchOrListResponderWithEvents(
 		lan,
 		&encoders.WatchOrListResponderCfg{
 			Watch:          params.Watch,
 			TimeoutSeconds: params.TimeoutSeconds,
 			Limit:          params.Limit,
 			Cont:           params.Continue,
+			Matcher: func(label k8sLabels.Selector, field k8sFields.Selector) k8sStorage.SelectionPredicate {
+				return k8sStorage.SelectionPredicate{
+					Label:       label,
+					Field:       field,
+					GetAttrs:    GetNodeAttrs,
+					IndexFields: []string{"spec.nodeName"},
+				}
+			},
+			FieldSelector: params.FieldSelector,
+			LabelSelector: params.LabelSelector,
 		},
 		getResponder,
+		coreEncoder,
 	)
+}
+
+type manageNodes struct {
+	nodeMgr *NodeMgr
+	cnMgr   encoders.ObjHandler
+}
+
+func NewNodesMgr(cnMgr encoders.ObjHandler) management.PostManagementKubernetesIoV1NodesHandler {
+	return &manageNodes{
+		nodeMgr: NodeManager,
+		cnMgr:   cnMgr,
+	}
+}
+
+func (lNodes *manageNodes) Handle(params management.PostManagementKubernetesIoV1NodesParams) middleware.Responder {
+	log.WithFields(logrus.Fields{
+		"Method": "POST",
+		"URL":    "/management/kubernetes.io/api/v1/nodes",
+		"Params": params.HTTPRequest.URL.RawQuery,
+	}).Debug("request received")
+
+	totalNodes := params.Options.Add - params.Options.Del
+
+	if params.Options.WithDependents {
+		encoders.GenerateK8sEventsWithDependent(lNodes.nodeMgr, lNodes.cnMgr, totalNodes)
+	} else {
+		encoders.GenerateK8sEvents(lNodes.nodeMgr, totalNodes)
+	}
+
+	return management.NewPostManagementKubernetesIoV1NodesAccepted()
+}
+
+// Code retrieved from Kubernetes to avoid importing the k8s.io/kubernetes
+
+// NodeToSelectableFields returns a field set that represents the object.
+func NodeToSelectableFields(node *k8sCoreV1.Node) k8sFields.Set {
+	objectMetaFieldsSet := k8sGeneric.ObjectMetaFieldsSet(&node.ObjectMeta, false)
+	specificFieldsSet := k8sFields.Set{
+		"spec.unschedulable": fmt.Sprint(node.Spec.Unschedulable),
+	}
+	return k8sGeneric.MergeFieldsSets(objectMetaFieldsSet, specificFieldsSet)
+}
+
+// GetNodeAttrs returns labels and fields of a given object for filtering purposes.
+func GetNodeAttrs(obj k8sRuntime.Object) (k8sLabels.Set, k8sFields.Set, error) {
+	watchEvent, ok := obj.(*k8sMetaV1.WatchEvent)
+	if ok {
+		obj = watchEvent.Object.Object
+	}
+	nodeObj, ok := obj.(*k8sCoreV1.Node)
+	if !ok {
+		return nil, nil, fmt.Errorf("not a node, but a %T", obj)
+	}
+	return k8sLabels.Set(nodeObj.ObjectMeta.Labels), NodeToSelectableFields(nodeObj), nil
 }
